@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ChristianBrown\CloudFunction;
 
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 
-interface CloudFunctionResponseInterface extends ResponseInterface
+interface ResponseInterface extends PsrResponseInterface
 {
     public const ERROR_JSON_ENCODING = 'Problem encoding JSON in response';
     public const HEADER_CONTENT_TYPE_VALUE_JSON = 'application/json; charset=utf-8';

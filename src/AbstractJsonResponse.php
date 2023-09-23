@@ -9,12 +9,12 @@ use JsonException;
 
 use const JSON_THROW_ON_ERROR;
 
-abstract class AbstractCloudFunctionResponse extends Response implements CloudFunctionResponseInterface
+abstract class AbstractJsonResponse extends Response implements ResponseInterface
 {
     /**
      * @noinspection PhpUnusedLocalVariableInspection
      */
-    public function __construct(?CloudFunctionRequestConfigInterface $requestConfig, array $data = [], bool $success = true, ?string $error = null, int $statusCode = 200)
+    public function __construct(?RequestConfigInterface $requestConfig, array $data = [], bool $success = true, ?string $error = null, int $statusCode = 200)
     {
         $time = time();
 
@@ -26,7 +26,7 @@ abstract class AbstractCloudFunctionResponse extends Response implements CloudFu
         if ($data) {
             $bodyJson[self::RESPONSE_API_KEY_DATA] = $data;
         }
-        if ($requestConfig instanceof CloudFunctionRequestConfigInterface) {
+        if ($requestConfig instanceof RequestConfigInterface) {
             $bodyJson[self::RESPONSE_API_KEY_VERSION] = $requestConfig->getKrevision();
         }
         if (null !== $error) {
@@ -47,7 +47,7 @@ abstract class AbstractCloudFunctionResponse extends Response implements CloudFu
         }
 
         $headers = self::HEADERS;
-        if ($requestConfig instanceof CloudFunctionRequestConfigInterface) {
+        if ($requestConfig instanceof RequestConfigInterface) {
             $requiredOrigin = $requestConfig->getRequiredOrigin();
             if (!empty($requiredOrigin)) {
                 $headers[self::HEADER_KEY_ALLOW_ORIGIN] = $requiredOrigin;

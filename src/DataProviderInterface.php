@@ -6,7 +6,7 @@ namespace ChristianBrown\CloudFunction;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-interface CloudFunctionDataProviderInterface
+interface DataProviderInterface
 {
     public function getData(array $env, ServerRequestInterface $request): array;
 }

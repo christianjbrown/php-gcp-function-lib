@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace ChristianBrown\CloudFunction;
 
+use ChristianBrown\UserFriendlyException\UserFriendlyExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use ChristianBrown\UserFriendlyException\UserFriendlyExceptionInterface;
 use Throwable;
 
 final class CloudFunction implements CloudFunctionInterface
 {
-    private CloudFunctionDataProviderInterface $dataProvider;
+    private DataProviderInterface $dataProvider;
     private array $env;
-    private CloudFunctionRequestConfigTransformerInterface $requestConfigTransformer;
+    private ConfigTransformerInterface $requestConfigTransformer;
 
-    public function __construct(CloudFunctionDataProviderInterface $dataProvider, array $env)
+    public function __construct(DataProviderInterface $dataProvider, array $env)
     {
-        $this->requestConfigTransformer = new CloudFunctionRequestConfigTransformer();
+        $this->requestConfigTransformer = new ConfigTransformer();
         $this->dataProvider = $dataProvider;
         $this->env = $env;
     }
@@ -27,32 +27,32 @@ final class CloudFunction implements CloudFunctionInterface
         try {
             $requestConfig = $this->requestConfigTransformer->transform($this->env);
         } /* @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $exception) {
-            return new CloudFunctionJsonErrorResponse(null, self::ERROR_UNHANDLED);
+            return new JsonErrorResponse(null, self::ERROR_UNHANDLED);
         }
 
         try {
             $isAuthorized = self::isAuthorized($request, $requestConfig);
             if (!$isAuthorized) {
-                return new CloudFunctionJsonErrorResponse($requestConfig, self::ERROR_NOT_AUTHORIZED, 401);
+                return new JsonErrorResponse($requestConfig, self::ERROR_NOT_AUTHORIZED, 401);
             }
 
             $data = $this->dataProvider->getData($this->env, $request);
 
-            $response = new CloudFunctionJsonSuccessResponse($requestConfig, $data);
+            $response = new JsonSuccessResponse($requestConfig, $data);
         } catch (UserFriendlyExceptionInterface $exception) {
-            $response = new CloudFunctionJsonErrorResponse($requestConfig, $exception->getMessage());
+            $response = new JsonErrorResponse($requestConfig, $exception->getMessage());
         } catch (Throwable $exception) {
             if ($requestConfig->getDebug()) {
-                $response = new CloudFunctionJsonErrorResponse($requestConfig, $exception->getMessage());
+                $response = new JsonErrorResponse($requestConfig, $exception->getMessage());
             } else {
-                $response = new CloudFunctionJsonErrorResponse($requestConfig, self::ERROR_UNHANDLED);
+                $response = new JsonErrorResponse($requestConfig, self::ERROR_UNHANDLED);
             }
         }
 
         return $response;
     }
 
-    private static function isAuthorized(ServerRequestInterface $request, CloudFunctionRequestConfigInterface $config): bool
+    private static function isAuthorized(ServerRequestInterface $request, RequestConfigInterface $config): bool
     {
         $authorized = true;
         $requiredHeaderKey = $config->getRequiredHeaderKey();
