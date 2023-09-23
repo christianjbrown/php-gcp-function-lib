@@ -7,6 +7,7 @@ namespace ChristianBrown\CloudFunction;
 use GuzzleHttp\Psr7\Response;
 use JsonException;
 
+use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 
 abstract class AbstractJsonResponse extends Response implements ResponseInterface
@@ -33,9 +34,8 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
             $bodyJson[self::RESPONSE_API_KEY_ERROR] = $error;
         }
 
-        ksort($bodyJson);
         try {
-            $body = json_encode($bodyJson, JSON_THROW_ON_ERROR);
+            $body = json_encode($bodyJson, JSON_THROW_ON_ERROR + JSON_PRETTY_PRINT);
         } catch (JsonException $exception) {
             $success = false;
             $statusCode = 500;
@@ -43,7 +43,7 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
             /**
              * @noinspection PhpUsageOfSilenceOperatorInspection
              */
-            $body = @json_encode($bodyJson);
+            $body = @json_encode($bodyJson, JSON_PRETTY_PRINT);
         }
 
         $headers = self::HEADERS;
