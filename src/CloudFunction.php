@@ -13,11 +13,11 @@ final class CloudFunction implements CloudFunctionInterface
 {
     private DataProviderInterface $dataProvider;
     private array $env;
-    private ConfigTransformerInterface $requestConfigTransformer;
+    private RequestConfigTransformerInterface $requestConfigTransformer;
 
     public function __construct(DataProviderInterface $dataProvider, array $env)
     {
-        $this->requestConfigTransformer = new ConfigTransformer();
+        $this->requestConfigTransformer = new RequestConfigTransformer();
         $this->dataProvider = $dataProvider;
         $this->env = $env;
     }

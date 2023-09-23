@@ -10,7 +10,7 @@ use function is_numeric;
 use function is_string;
 use function sprintf;
 
-final class ConfigTransformer implements ConfigTransformerInterface
+final class RequestConfigTransformer implements RequestConfigTransformerInterface
 {
     public function transform(array $env): RequestConfigInterface
     {

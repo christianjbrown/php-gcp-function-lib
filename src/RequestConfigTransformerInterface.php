@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ChristianBrown\CloudFunction;
 
-interface ConfigTransformerInterface
+interface RequestConfigTransformerInterface
 {
     public const ENV_DEBUG = 'DEBUG';
     public const ENV_K_REVISION = 'K_REVISION';
