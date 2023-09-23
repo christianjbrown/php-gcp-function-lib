@@ -6,7 +6,7 @@ namespace ChristianBrown\CloudFunction;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use PublicErrorMessageException\PublicErrorMessageException;
+use ChristianBrown\UserFriendlyException\UserFriendlyExceptionInterface;
 use Throwable;
 
 final class CloudFunction implements CloudFunctionInterface
@@ -39,7 +39,7 @@ final class CloudFunction implements CloudFunctionInterface
             $data = $this->dataProvider->getData($this->env, $request);
 
             $response = new CloudFunctionJsonSuccessResponse($requestConfig, $data);
-        } catch (PublicErrorMessageException $exception) {
+        } catch (UserFriendlyExceptionInterface $exception) {
             $response = new CloudFunctionJsonErrorResponse($requestConfig, $exception->getMessage());
         } catch (Throwable $exception) {
             if ($requestConfig->getDebug()) {
