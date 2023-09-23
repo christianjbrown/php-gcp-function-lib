@@ -10,9 +10,9 @@ use function is_numeric;
 use function is_string;
 use function sprintf;
 
-final class RequestConfigTransformer implements RequestConfigTransformerInterface
+final class FunctionConfigTransformer implements FunctionConfigTransformerInterface
 {
-    public function transform(array $env): RequestConfigInterface
+    public function transform(array $env): FunctionConfigInterface
     {
         // Required values
 
@@ -21,7 +21,7 @@ final class RequestConfigTransformer implements RequestConfigTransformerInterfac
         }
         $kRevision = (int) $env[self::ENV_K_REVISION];
 
-        $config = new RequestConfig($kRevision);
+        $config = new FunctionConfig($kRevision);
 
         // Optional values
 

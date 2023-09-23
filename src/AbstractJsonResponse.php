@@ -14,7 +14,7 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
     /**
      * @noinspection PhpUnusedLocalVariableInspection
      */
-    public function __construct(?RequestConfigInterface $requestConfig, array $data = [], bool $success = true, ?string $error = null, int $statusCode = 200)
+    public function __construct(?FunctionConfigInterface $functionConfig, array $data = [], bool $success = true, ?string $error = null, int $statusCode = 200)
     {
         $time = time();
 
@@ -26,8 +26,8 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
         if ($data) {
             $bodyJson[self::RESPONSE_API_KEY_DATA] = $data;
         }
-        if ($requestConfig instanceof RequestConfigInterface) {
-            $bodyJson[self::RESPONSE_API_KEY_VERSION] = $requestConfig->getKrevision();
+        if ($functionConfig instanceof FunctionConfigInterface) {
+            $bodyJson[self::RESPONSE_API_KEY_VERSION] = $functionConfig->getKrevision();
         }
         if (null !== $error) {
             $bodyJson[self::RESPONSE_API_KEY_ERROR] = $error;
@@ -47,12 +47,12 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
         }
 
         $headers = self::HEADERS;
-        if ($requestConfig instanceof RequestConfigInterface) {
-            $requiredOrigin = $requestConfig->getRequiredOrigin();
+        if ($functionConfig instanceof FunctionConfigInterface) {
+            $requiredOrigin = $functionConfig->getRequiredOrigin();
             if (!empty($requiredOrigin)) {
                 $headers[self::HEADER_KEY_ALLOW_ORIGIN] = $requiredOrigin;
                 $varyList = [self::HEADER_VARY_ACCEPT_ENCODING, self::HEADER_VARY_ORIGIN];
-                $requiredHeaderKey = $requestConfig->getRequiredHeaderKey();
+                $requiredHeaderKey = $functionConfig->getRequiredHeaderKey();
                 if ($requiredHeaderKey) {
                     $varyList[] = $requiredHeaderKey;
                 }

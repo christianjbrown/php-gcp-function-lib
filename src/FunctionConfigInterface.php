@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ChristianBrown\CloudFunction;
 
-interface RequestConfigInterface
+interface FunctionConfigInterface
 {
     public function getDebug(): bool;
 
