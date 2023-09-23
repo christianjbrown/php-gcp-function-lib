@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CloudFunction;
+namespace ChristianBrown\CloudFunction;
 
 final class CloudFunctionRequestConfig implements CloudFunctionRequestConfigInterface
 {
