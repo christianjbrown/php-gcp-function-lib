@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ChristianBrown\CloudFunction;
 
-final class CloudFunctionRequestConfig implements CloudFunctionRequestConfigInterface
+final class RequestConfig implements RequestConfigInterface
 {
     private bool $debug = false;
     private int $kRevision;

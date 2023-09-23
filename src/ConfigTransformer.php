@@ -10,9 +10,9 @@ use function is_numeric;
 use function is_string;
 use function sprintf;
 
-final class CloudFunctionRequestConfigTransformer implements CloudFunctionRequestConfigTransformerInterface
+final class ConfigTransformer implements ConfigTransformerInterface
 {
-    public function transform(array $env): CloudFunctionRequestConfigInterface
+    public function transform(array $env): RequestConfigInterface
     {
         // Required values
 
@@ -21,7 +21,7 @@ final class CloudFunctionRequestConfigTransformer implements CloudFunctionReques
         }
         $kRevision = (int) $env[self::ENV_K_REVISION];
 
-        $config = new CloudFunctionRequestConfig($kRevision);
+        $config = new RequestConfig($kRevision);
 
         // Optional values
 
