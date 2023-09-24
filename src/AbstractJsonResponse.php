@@ -7,6 +7,7 @@ namespace ChristianBrown\CloudFunction;
 use GuzzleHttp\Psr7\Response;
 use JsonException;
 
+use function gmdate;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 
@@ -22,7 +23,7 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
         $bodyJson = [
             self::RESPONSE_API_KEY_SUCCESS => $success,
             self::RESPONSE_API_KEY_TIMESTAMP_UNIX => $time,
-            self::RESPONSE_API_KEY_TIMESTAMP_ISO8601 => date('c', $time),
+            self::RESPONSE_API_KEY_TIMESTAMP_ISO8601 => gmdate('c', $time),
         ];
         if ($data) {
             $bodyJson[self::RESPONSE_API_KEY_DATA] = $data;
