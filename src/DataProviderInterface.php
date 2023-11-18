@@ -8,5 +8,5 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface DataProviderInterface
 {
-    public function getData(array $env, ServerRequestInterface $request): array;
+    public function getData(ServerRequestInterface $request): array;
 }
