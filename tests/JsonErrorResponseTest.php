@@ -20,18 +20,18 @@ final class JsonErrorResponseTest extends TestCase
             ->willReturn(42)
         ;
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-required-header-key')
+            ->willReturn('test-header-key')
         ;
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-required-origin')
+            ->willReturn('test-origin')
         ;
 
         $jsonResponse = new JsonErrorResponse($functionConfig, 'test-error', 123);
 
         self::assertSame(123, $jsonResponse->getStatusCode());
         self::assertSame('application/json; charset=utf-8', $jsonResponse->getHeaderLine('Content-Type'));
-        self::assertSame('test-required-origin', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
-        self::assertSame('Accept-Encoding,Origin,test-required-header-key', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
+        self::assertSame('test-origin', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
+        self::assertSame('Accept-Encoding,Origin,test-header-key', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
         self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
         self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
 
@@ -58,18 +58,18 @@ final class JsonErrorResponseTest extends TestCase
             ->willReturn(42)
         ;
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-required-header-key')
+            ->willReturn('test-header-key')
         ;
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-required-origin')
+            ->willReturn('test-origin')
         ;
 
         $jsonResponse = new JsonErrorResponse($functionConfig, "\xC3\x28", 123);
 
         self::assertSame(500, $jsonResponse->getStatusCode());
         self::assertSame('application/json; charset=utf-8', $jsonResponse->getHeaderLine('Content-Type'));
-        self::assertSame('test-required-origin', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
-        self::assertSame('Accept-Encoding,Origin,test-required-header-key', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
+        self::assertSame('test-origin', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
+        self::assertSame('Accept-Encoding,Origin,test-header-key', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
         self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
         self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
 

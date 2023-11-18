@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ChristianBrown\CloudFunction;
 
 use ChristianBrown\UserFriendlyException\UserFriendlyExceptionInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
@@ -50,7 +49,7 @@ final class CloudFunction implements CloudFunctionInterface
         $requiredHeaderKey = $config->getRequiredHeaderKey();
         if ($requiredHeaderKey) {
             $requiredHeaderValue = $config->getRequiredHeaderValue();
-            if (!$request->hasHeader($requiredHeaderKey) || [$requiredHeaderValue] !== $request->getHeader($requiredHeaderKey)) {
+            if (!$request->hasHeader($requiredHeaderKey) || $requiredHeaderValue !== $request->getHeaderLine($requiredHeaderKey)) {
                 $authorized = false;
             }
         }
