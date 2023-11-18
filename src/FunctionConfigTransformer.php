@@ -25,7 +25,7 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
 
         // Optional values
 
-        if (!empty($env[self::ENV_DEBUG]) && 'false' !== $env[self::ENV_DEBUG]) {
+        if (!empty($env[self::ENV_DEBUG]) && 'true' === $env[self::ENV_DEBUG]) {
             $config->setDebug(true);
         }
         if (!empty($env[self::ENV_REQUIRED_HEADER_KEY]) && is_string($env[self::ENV_REQUIRED_HEADER_KEY])) {
