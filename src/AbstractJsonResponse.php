@@ -42,6 +42,8 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
         } catch (JsonException $exception) {
             $success = false;
             $statusCode = 500;
+            $bodyJson[self::RESPONSE_API_KEY_SUCCESS] = false;
+            unset($bodyJson[self::RESPONSE_API_KEY_DATA]);
             $bodyJson[self::RESPONSE_API_KEY_ERROR] = self::ERROR_JSON_ENCODING;
             /**
              * @noinspection PhpUsageOfSilenceOperatorInspection

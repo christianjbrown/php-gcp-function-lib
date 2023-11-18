@@ -12,40 +12,32 @@ use Throwable;
 final class CloudFunction implements CloudFunctionInterface
 {
     private DataProviderInterface $dataProvider;
-    private array $env;
-    private FunctionConfigTransformerInterface $functionConfigTransformer;
+    private FunctionConfigInterface $functionConfig;
 
-    public function __construct(DataProviderInterface $dataProvider, array $env)
+    public function __construct(DataProviderInterface $dataProvider, FunctionConfigInterface $functionConfig)
     {
-        $this->functionConfigTransformer = new FunctionConfigTransformer();
         $this->dataProvider = $dataProvider;
-        $this->env = $env;
+        $this->functionConfig = $functionConfig;
     }
 
     public function run(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $functionConfig = $this->functionConfigTransformer->transform($this->env);
-        } /* @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $exception) {
-            return new JsonErrorResponse(null, self::ERROR_UNHANDLED);
-        }
-
-        try {
-            $isAuthorized = self::isAuthorized($request, $functionConfig);
+            $isAuthorized = self::isAuthorized($request, $this->functionConfig);
             if (!$isAuthorized) {
-                return new JsonErrorResponse($functionConfig, self::ERROR_NOT_AUTHORIZED, 401);
+                return new JsonErrorResponse($this->functionConfig, self::ERROR_NOT_AUTHORIZED, 401);
             }
 
-            $data = $this->dataProvider->getData($this->env, $request);
+            $data = $this->dataProvider->getData($request);
 
-            $response = new JsonSuccessResponse($functionConfig, $data);
+            $response = new JsonSuccessResponse($this->functionConfig, $data);
         } catch (UserFriendlyExceptionInterface $exception) {
-            $response = new JsonErrorResponse($functionConfig, $exception->getMessage());
+            $response = new JsonErrorResponse($this->functionConfig, $exception->getMessage());
         } catch (Throwable $exception) {
-            if ($functionConfig->getDebug()) {
-                $response = new JsonErrorResponse($functionConfig, $exception->getMessage());
+            if ($this->functionConfig->getDebug()) {
+                $response = new JsonErrorResponse($this->functionConfig, $exception->getMessage());
             } else {
-                $response = new JsonErrorResponse($functionConfig, self::ERROR_UNHANDLED);
+                $response = new JsonErrorResponse($this->functionConfig, self::ERROR_UNHANDLED);
             }
         }
 
