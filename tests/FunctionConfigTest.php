@@ -18,15 +18,24 @@ final class FunctionConfigTest extends TestCase
         self::assertNull($functionConfig->getRequiredHeaderKey());
         self::assertNull($functionConfig->getRequiredHeaderValue());
         self::assertNull($functionConfig->getRequiredOrigin());
+        self::assertNull($functionConfig->getUseCacheTtl());
+        self::assertNull($functionConfig->getUseCacheButRequestTtl());
+        self::assertNull($functionConfig->getUseCacheIfErrorTtl());
 
         $functionConfig->setDebug(true);
         $functionConfig->setRequiredHeaderKey('test-required-header-key');
         $functionConfig->setRequiredHeaderValue('test-required-header-value');
         $functionConfig->setRequiredOrigin('test-required-origin');
+        $functionConfig->setUseCacheTtl(3600);
+        $functionConfig->setUseCacheButRequestTtl(7200);
+        $functionConfig->setUseCacheIfErrorTtl(259200);
 
         self::assertTrue($functionConfig->getDebug());
         self::assertSame('test-required-header-key', $functionConfig->getRequiredHeaderKey());
         self::assertSame('test-required-header-value', $functionConfig->getRequiredHeaderValue());
         self::assertSame('test-required-origin', $functionConfig->getRequiredOrigin());
+        self::assertSame(3600, $functionConfig->getUseCacheTtl());
+        self::assertSame(7200, $functionConfig->getUseCacheButRequestTtl());
+        self::assertSame(259200, $functionConfig->getUseCacheIfErrorTtl());
     }
 }

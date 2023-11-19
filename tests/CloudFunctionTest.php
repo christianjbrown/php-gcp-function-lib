@@ -58,6 +58,15 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getKrevision')
             ->willReturn(42)
         ;
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600)
+        ;
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200)
+        ;
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200)
+        ;
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
 
@@ -101,6 +110,15 @@ final class CloudFunctionTest extends TestCase
         ;
         $functionConfig->method('getKrevision')
             ->willReturn(42)
+        ;
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600)
+        ;
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200)
+        ;
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200)
         ;
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
@@ -148,6 +166,15 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getDebug')
             ->willReturn($debug)
         ;
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600)
+        ;
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200)
+        ;
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200)
+        ;
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
 
@@ -193,6 +220,15 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getKrevision')
             ->willReturn(42)
         ;
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600)
+        ;
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200)
+        ;
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200)
+        ;
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
 
@@ -219,6 +255,15 @@ final class CloudFunctionTest extends TestCase
         ;
         $functionConfig->method('getKrevision')
             ->willReturn(42)
+        ;
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600)
+        ;
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200)
+        ;
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200)
         ;
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
@@ -271,8 +316,8 @@ final class CloudFunctionTest extends TestCase
         if ($expectedVary) {
             self::assertSame($expectedVary, $response->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
         }
-        self::assertSame('s-maxage=3600, max-age=3600, stale-while-revalidate=259200, stale-if-error=259200', $response->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
-        self::assertSame('max-age=3600, stale-while-revalidate=259200, stale-if-error=259200', $response->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
+        self::assertSame('s-maxage=3600, max-age=3600, stale-while-revalidate=7200, stale-if-error=259200', $response->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
+        self::assertSame('max-age=3600, stale-while-revalidate=7200, stale-if-error=259200', $response->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
 
         $json = json_decode($response->getBody()->getContents(), true);
 

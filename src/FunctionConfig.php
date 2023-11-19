@@ -11,6 +11,9 @@ final class FunctionConfig implements FunctionConfigInterface
     private ?string $requiredHeaderKey = null;
     private ?string $requiredHeaderValue = null;
     private ?string $requiredOrigin = null;
+    private ?int $useCacheButRequestTtl = null;
+    private ?int $useCacheIfErrorTtl = null;
+    private ?int $useCacheTtl = null;
 
     public function __construct(int $kRevision)
     {
@@ -42,6 +45,21 @@ final class FunctionConfig implements FunctionConfigInterface
         return $this->requiredOrigin;
     }
 
+    public function getUseCacheButRequestTtl(): ?int
+    {
+        return $this->useCacheButRequestTtl;
+    }
+
+    public function getUseCacheIfErrorTtl(): ?int
+    {
+        return $this->useCacheIfErrorTtl;
+    }
+
+    public function getUseCacheTtl(): ?int
+    {
+        return $this->useCacheTtl;
+    }
+
     public function setDebug(bool $value): self
     {
         $this->debug = $value;
@@ -66,6 +84,27 @@ final class FunctionConfig implements FunctionConfigInterface
     public function setRequiredOrigin(?string $value): self
     {
         $this->requiredOrigin = $value;
+
+        return $this;
+    }
+
+    public function setUseCacheButRequestTtl(?int $value): FunctionConfigInterface
+    {
+        $this->useCacheButRequestTtl = $value;
+
+        return $this;
+    }
+
+    public function setUseCacheIfErrorTtl(?int $value): FunctionConfigInterface
+    {
+        $this->useCacheIfErrorTtl = $value;
+
+        return $this;
+    }
+
+    public function setUseCacheTtl(?int $value): FunctionConfigInterface
+    {
+        $this->useCacheTtl = $value;
 
         return $this;
     }

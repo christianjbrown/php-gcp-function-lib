@@ -8,6 +8,8 @@ use GuzzleHttp\Psr7\Response;
 use JsonException;
 
 use function gmdate;
+use function implode;
+use function sprintf;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
@@ -66,9 +68,30 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
         }
 
         if ($success) {
-            // @todo Get these values from config, from env vars
-            $headers[self::HEADER_KEY_SURROGATE_CONTROL] = 'max-age=3600, stale-while-revalidate=259200, stale-if-error=259200';
-            $headers[self::HEADER_KEY_CACHE_CONTROL] = 's-maxage=3600, max-age=3600, stale-while-revalidate=259200, stale-if-error=259200';
+            $cacheControlParts = [];
+            $surrogateControlParts = [];
+            if ($functionConfig->getUseCacheTtl()) {
+                $maxAge = sprintf('max-age=%d', $functionConfig->getUseCacheTtl());
+                $cacheControlParts[] = sprintf('s-maxage=%d', $functionConfig->getUseCacheTtl());
+                $cacheControlParts[] = $maxAge;
+                $surrogateControlParts[] = $maxAge;
+            }
+            if ($functionConfig->getUseCacheButRequestTtl()) {
+                $staleWhilstRevalidate = sprintf('stale-while-revalidate=%d', $functionConfig->getUseCacheButRequestTtl());
+                $cacheControlParts[] = $staleWhilstRevalidate;
+                $surrogateControlParts[] = $staleWhilstRevalidate;
+            }
+            if ($functionConfig->getUseCacheIfErrorTtl()) {
+                $staleIfError = sprintf('stale-if-error=%d', $functionConfig->getUseCacheIfErrorTtl());
+                $cacheControlParts[] = $staleIfError;
+                $surrogateControlParts[] = $staleIfError;
+            }
+            if ($cacheControlParts) {
+                $headers[self::HEADER_KEY_CACHE_CONTROL] = implode(', ', $cacheControlParts);
+            }
+            if ($surrogateControlParts) {
+                $headers[self::HEADER_KEY_SURROGATE_CONTROL] = implode(', ', $surrogateControlParts);
+            }
         }
 
         parent::__construct($statusCode, $headers, $body);
