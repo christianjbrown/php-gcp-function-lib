@@ -25,6 +25,15 @@ final class JsonSuccessResponseTest extends TestCase
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin')
         ;
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600)
+        ;
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200)
+        ;
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200)
+        ;
 
         $jsonResponse = new JsonSuccessResponse($functionConfig, ['test-data'], 123);
 
@@ -32,8 +41,8 @@ final class JsonSuccessResponseTest extends TestCase
         self::assertSame('application/json; charset=utf-8', $jsonResponse->getHeaderLine('Content-Type'));
         self::assertSame('test-origin', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
         self::assertSame('Accept-Encoding,Origin,test-header-key', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
-        self::assertSame('s-maxage=3600, max-age=3600, stale-while-revalidate=259200, stale-if-error=259200', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
-        self::assertSame('max-age=3600, stale-while-revalidate=259200, stale-if-error=259200', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
+        self::assertSame('s-maxage=3600, max-age=3600, stale-while-revalidate=7200, stale-if-error=259200', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
+        self::assertSame('max-age=3600, stale-while-revalidate=7200, stale-if-error=259200', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
 
         $json = json_decode($jsonResponse->getBody()->getContents(), true);
 
@@ -62,6 +71,15 @@ final class JsonSuccessResponseTest extends TestCase
         ;
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin')
+        ;
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600)
+        ;
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200)
+        ;
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200)
         ;
 
         $jsonResponse = new JsonSuccessResponse($functionConfig, ["\xC3\x28"], 123);

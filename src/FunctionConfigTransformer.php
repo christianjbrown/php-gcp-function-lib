@@ -37,6 +37,15 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         if (!empty($env[self::ENV_REQUIRED_ORIGIN]) && is_string($env[self::ENV_REQUIRED_ORIGIN])) {
             $config->setRequiredOrigin($env[self::ENV_REQUIRED_ORIGIN]);
         }
+        if (!empty($env[self::ENV_USE_CACHE_TTL]) && is_numeric($env[self::ENV_USE_CACHE_TTL])) {
+            $config->setUseCacheTtl((int) $env[self::ENV_USE_CACHE_TTL]);
+        }
+        if (!empty($env[self::ENV_USE_CACHE_BUT_REQUEST_TTL]) && is_numeric($env[self::ENV_USE_CACHE_BUT_REQUEST_TTL])) {
+            $config->setUseCacheButRequestTtl((int) $env[self::ENV_USE_CACHE_BUT_REQUEST_TTL]);
+        }
+        if (!empty($env[self::ENV_USE_CACHE_IF_ERROR_TTL]) && is_numeric($env[self::ENV_USE_CACHE_IF_ERROR_TTL])) {
+            $config->setUseCacheIfErrorTtl((int) $env[self::ENV_USE_CACHE_IF_ERROR_TTL]);
+        }
 
         return $config;
     }
