@@ -39,6 +39,7 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
         }
 
         ksort($bodyJson);
+
         try {
             $body = json_encode($bodyJson, JSON_THROW_ON_ERROR + JSON_PRETTY_PRINT);
         } catch (JsonException $exception) {

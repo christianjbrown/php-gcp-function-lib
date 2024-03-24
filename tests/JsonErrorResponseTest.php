@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace ChristianBrown\CloudFunction\Tests;
+
 use ChristianBrown\CloudFunction\AbstractJsonResponse;
 use ChristianBrown\CloudFunction\FunctionConfigInterface;
 use ChristianBrown\CloudFunction\JsonErrorResponse;
@@ -17,14 +19,11 @@ final class JsonErrorResponseTest extends TestCase
     {
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
-            ->willReturn(42)
-        ;
+            ->willReturn(42);
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-header-key')
-        ;
+            ->willReturn('test-header-key');
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-origin')
-        ;
+            ->willReturn('test-origin');
 
         $jsonResponse = new JsonErrorResponse($functionConfig, 'test-error', 123);
 
@@ -55,14 +54,11 @@ final class JsonErrorResponseTest extends TestCase
     {
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
-            ->willReturn(42)
-        ;
+            ->willReturn(42);
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-header-key')
-        ;
+            ->willReturn('test-header-key');
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-origin')
-        ;
+            ->willReturn('test-origin');
 
         $jsonResponse = new JsonErrorResponse($functionConfig, "\xC3\x28", 123);
 
