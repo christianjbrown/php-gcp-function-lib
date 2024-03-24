@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
+namespace ChristianBrown\CloudFunction\Tests;
+
 use ChristianBrown\CloudFunction\FunctionConfig;
 use ChristianBrown\CloudFunction\FunctionConfigTransformer;
 use ChristianBrown\CloudFunction\FunctionConfigTransformerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 #[CoversClass(FunctionConfig::class)]
 #[CoversClass(FunctionConfigTransformer::class)]

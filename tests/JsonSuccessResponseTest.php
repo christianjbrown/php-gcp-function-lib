@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace ChristianBrown\CloudFunction\Tests;
+
 use ChristianBrown\CloudFunction\AbstractJsonResponse;
 use ChristianBrown\CloudFunction\FunctionConfigInterface;
 use ChristianBrown\CloudFunction\JsonSuccessResponse;
@@ -17,23 +19,17 @@ final class JsonSuccessResponseTest extends TestCase
     {
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
-            ->willReturn(42)
-        ;
+            ->willReturn(42);
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-header-key')
-        ;
+            ->willReturn('test-header-key');
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-origin')
-        ;
+            ->willReturn('test-origin');
         $functionConfig->method('getUseCacheTtl')
-            ->willReturn(3600)
-        ;
+            ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
-            ->willReturn(7200)
-        ;
+            ->willReturn(7200);
         $functionConfig->method('getUseCacheIfErrorTtl')
-            ->willReturn(259200)
-        ;
+            ->willReturn(259200);
 
         $jsonResponse = new JsonSuccessResponse($functionConfig, ['test-data'], 123);
 
@@ -64,23 +60,17 @@ final class JsonSuccessResponseTest extends TestCase
     {
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
-            ->willReturn(42)
-        ;
+            ->willReturn(42);
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-header-key')
-        ;
+            ->willReturn('test-header-key');
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-origin')
-        ;
+            ->willReturn('test-origin');
         $functionConfig->method('getUseCacheTtl')
-            ->willReturn(3600)
-        ;
+            ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
-            ->willReturn(7200)
-        ;
+            ->willReturn(7200);
         $functionConfig->method('getUseCacheIfErrorTtl')
-            ->willReturn(259200)
-        ;
+            ->willReturn(259200);
 
         $jsonResponse = new JsonSuccessResponse($functionConfig, ["\xC3\x28"], 123);
 

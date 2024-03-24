@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace ChristianBrown\CloudFunction\Tests;
+
 use ChristianBrown\CloudFunction\AbstractJsonResponse;
 use ChristianBrown\CloudFunction\CloudFunction;
 use ChristianBrown\CloudFunction\CloudFunctionInterface;
@@ -18,6 +20,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 
 #[CoversClass(JsonSuccessResponse::class)]
 #[CoversClass(JsonErrorResponse::class)]
@@ -33,40 +36,30 @@ final class CloudFunctionTest extends TestCase
         $request = $this->createMock(ServerRequestInterface::class);
         $request->method('hasHeader')
             ->with('test-header-key')
-            ->willReturn(true)
-        ;
+            ->willReturn(true);
         $request->method('getHeaderLine')
             ->with('test-header-key')
-            ->willReturn('test-header-value-wrong')
-        ;
+            ->willReturn('test-header-value-wrong');
 
         $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->method('getData')
-            ->willReturn(['test-data'])
-        ;
+            ->willReturn(['test-data']);
 
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-header-key')
-        ;
+            ->willReturn('test-header-key');
         $functionConfig->method('getRequiredHeaderValue')
-            ->willReturn('test-header-value')
-        ;
+            ->willReturn('test-header-value');
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-origin')
-        ;
+            ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42)
-        ;
+            ->willReturn(42);
         $functionConfig->method('getUseCacheTtl')
-            ->willReturn(3600)
-        ;
+            ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
-            ->willReturn(7200)
-        ;
+            ->willReturn(7200);
         $functionConfig->method('getUseCacheIfErrorTtl')
-            ->willReturn(259200)
-        ;
+            ->willReturn(259200);
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
 
@@ -83,43 +76,33 @@ final class CloudFunctionTest extends TestCase
         $request = $this->createMock(ServerRequestInterface::class);
         $request->method('hasHeader')
             ->with('test-header-key')
-            ->willReturn(true)
-        ;
+            ->willReturn(true);
         $request->method('getHeaderLine')
             ->with('test-header-key')
-            ->willReturn('test-header-value')
-        ;
+            ->willReturn('test-header-value');
 
         // Cannot mock getMessage in Exception because it is final, need to use a real class
         $userFriendlyException = new UserFriendlyException('test-friendly-error-message');
 
         $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->method('getData')
-            ->willThrowException($userFriendlyException)
-        ;
+            ->willThrowException($userFriendlyException);
 
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-header-key')
-        ;
+            ->willReturn('test-header-key');
         $functionConfig->method('getRequiredHeaderValue')
-            ->willReturn('test-header-value')
-        ;
+            ->willReturn('test-header-value');
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-origin')
-        ;
+            ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42)
-        ;
+            ->willReturn(42);
         $functionConfig->method('getUseCacheTtl')
-            ->willReturn(3600)
-        ;
+            ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
-            ->willReturn(7200)
-        ;
+            ->willReturn(7200);
         $functionConfig->method('getUseCacheIfErrorTtl')
-            ->willReturn(259200)
-        ;
+            ->willReturn(259200);
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
 
@@ -128,6 +111,9 @@ final class CloudFunctionTest extends TestCase
         self::assertResponseError($actual, 'test-friendly-error-message', 500, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
     }
 
+    /**
+     * @throws Exception
+     */
     #[TestWith([true])]
     #[TestWith([false])]
     public function testNotSuccessfulThrowable(bool $debug): void
@@ -135,46 +121,35 @@ final class CloudFunctionTest extends TestCase
         $request = $this->createMock(ServerRequestInterface::class);
         $request->method('hasHeader')
             ->with('test-header-key')
-            ->willReturn(true)
-        ;
+            ->willReturn(true);
         $request->method('getHeaderLine')
             ->with('test-header-key')
-            ->willReturn('test-header-value')
-        ;
+            ->willReturn('test-header-value');
 
         // Cannot mock getMessage in Exception because it is final, need to use a real class
         $exception = new RuntimeException('test-exception-message');
 
         $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->method('getData')
-            ->willThrowException($exception)
-        ;
+            ->willThrowException($exception);
 
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-header-key')
-        ;
+            ->willReturn('test-header-key');
         $functionConfig->method('getRequiredHeaderValue')
-            ->willReturn('test-header-value')
-        ;
+            ->willReturn('test-header-value');
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-origin')
-        ;
+            ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42)
-        ;
+            ->willReturn(42);
         $functionConfig->method('getDebug')
-            ->willReturn($debug)
-        ;
+            ->willReturn($debug);
         $functionConfig->method('getUseCacheTtl')
-            ->willReturn(3600)
-        ;
+            ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
-            ->willReturn(7200)
-        ;
+            ->willReturn(7200);
         $functionConfig->method('getUseCacheIfErrorTtl')
-            ->willReturn(259200)
-        ;
+            ->willReturn(259200);
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
 
@@ -195,40 +170,30 @@ final class CloudFunctionTest extends TestCase
         $request = $this->createMock(ServerRequestInterface::class);
         $request->method('hasHeader')
             ->with('test-header-key')
-            ->willReturn(true)
-        ;
+            ->willReturn(true);
         $request->method('getHeaderLine')
             ->with('test-header-key')
-            ->willReturn('test-header-value')
-        ;
+            ->willReturn('test-header-value');
 
         $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->method('getData')
-            ->willReturn(['test-data'])
-        ;
+            ->willReturn(['test-data']);
 
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredHeaderKey')
-            ->willReturn('test-header-key')
-        ;
+            ->willReturn('test-header-key');
         $functionConfig->method('getRequiredHeaderValue')
-            ->willReturn('test-header-value')
-        ;
+            ->willReturn('test-header-value');
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-origin')
-        ;
+            ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42)
-        ;
+            ->willReturn(42);
         $functionConfig->method('getUseCacheTtl')
-            ->willReturn(3600)
-        ;
+            ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
-            ->willReturn(7200)
-        ;
+            ->willReturn(7200);
         $functionConfig->method('getUseCacheIfErrorTtl')
-            ->willReturn(259200)
-        ;
+            ->willReturn(259200);
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
 
@@ -246,25 +211,19 @@ final class CloudFunctionTest extends TestCase
 
         $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->method('getData')
-            ->willReturn(['test-data'])
-        ;
+            ->willReturn(['test-data']);
 
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredOrigin')
-            ->willReturn('test-origin')
-        ;
+            ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42)
-        ;
+            ->willReturn(42);
         $functionConfig->method('getUseCacheTtl')
-            ->willReturn(3600)
-        ;
+            ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
-            ->willReturn(7200)
-        ;
+            ->willReturn(7200);
         $functionConfig->method('getUseCacheIfErrorTtl')
-            ->willReturn(259200)
-        ;
+            ->willReturn(259200);
 
         $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
 
