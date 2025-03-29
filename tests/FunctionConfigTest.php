@@ -13,8 +13,8 @@ final class FunctionConfigTest extends TestCase
 {
     public function test(): void
     {
-        $functionConfig = new FunctionConfig(123);
-        self::assertSame(123, $functionConfig->getKrevision());
+        $functionConfig = new FunctionConfig('test-krevision');
+        self::assertSame('test-krevision', $functionConfig->getKrevision());
 
         self::assertFalse($functionConfig->getDebug());
         self::assertNull($functionConfig->getRequiredHeaderKey());

@@ -53,7 +53,7 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42);
+            ->willReturn('test-krevision');
         $functionConfig->method('getUseCacheTtl')
             ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
@@ -96,7 +96,7 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42);
+            ->willReturn('test-krevision');
         $functionConfig->method('getUseCacheTtl')
             ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
@@ -141,7 +141,7 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42);
+            ->willReturn('test-krevision');
         $functionConfig->method('getDebug')
             ->willReturn($debug);
         $functionConfig->method('getUseCacheTtl')
@@ -187,7 +187,7 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42);
+            ->willReturn('test-krevision');
         $functionConfig->method('getUseCacheTtl')
             ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
@@ -217,7 +217,7 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin');
         $functionConfig->method('getKrevision')
-            ->willReturn(42);
+            ->willReturn('test-krevision');
         $functionConfig->method('getUseCacheTtl')
             ->willReturn(3600);
         $functionConfig->method('getUseCacheButRequestTtl')
@@ -232,7 +232,7 @@ final class CloudFunctionTest extends TestCase
         self::assertResponseSuccess($actual, ['test-data'], 200, 'test-origin', 'Accept-Encoding,Origin');
     }
 
-    private static function assertResponseError(ResponseInterface $response, string $expectedError, int $statusCode, ?string $expectedOrigin, ?string $expectedVary, ?int $expectedVersion = 42): void
+    private static function assertResponseError(ResponseInterface $response, string $expectedError, int $statusCode, ?string $expectedOrigin, ?string $expectedVary, ?string $expectedVersion = 'test-krevision'): void
     {
         self::assertInstanceOf(JsonErrorResponseInterface::class, $response);
 
@@ -263,7 +263,7 @@ final class CloudFunctionTest extends TestCase
         self::assertSame($expectedVersion, $json['version']);
     }
 
-    private static function assertResponseSuccess(ResponseInterface $response, array $expectedData, int $statusCode, ?string $expectedOrigin, ?string $expectedVary, ?int $expectedVersion = 42): void
+    private static function assertResponseSuccess(ResponseInterface $response, array $expectedData, int $statusCode, ?string $expectedOrigin, ?string $expectedVary, ?string $expectedVersion = 'test-krevision'): void
     {
         self::assertInstanceOf(JsonSuccessResponseInterface::class, $response);
 

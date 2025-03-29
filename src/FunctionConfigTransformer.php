@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
+
 declare(strict_types=1);
 
 namespace ChristianBrown\CloudFunction;
@@ -16,10 +18,10 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
     {
         // Required values
 
-        if (empty($env[self::ENV_K_REVISION]) || !is_numeric($env[self::ENV_K_REVISION])) {
-            throw new RuntimeException(sprintf('%s not set or not a number', self::ENV_K_REVISION));
+        if (empty($env[self::ENV_K_REVISION]) || !is_string($env[self::ENV_K_REVISION])) {
+            throw new RuntimeException(sprintf('%s not set or not a string', self::ENV_K_REVISION));
         }
-        $kRevision = (int) $env[self::ENV_K_REVISION];
+        $kRevision = $env[self::ENV_K_REVISION];
 
         $config = new FunctionConfig($kRevision);
 

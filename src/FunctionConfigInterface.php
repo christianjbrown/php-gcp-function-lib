@@ -8,7 +8,7 @@ interface FunctionConfigInterface
 {
     public function getDebug(): bool;
 
-    public function getKrevision(): int;
+    public function getKrevision(): string;
 
     public function getRequiredHeaderKey(): ?string;
 

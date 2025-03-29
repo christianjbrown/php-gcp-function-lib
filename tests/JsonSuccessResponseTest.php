@@ -19,7 +19,7 @@ final class JsonSuccessResponseTest extends TestCase
     {
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
-            ->willReturn(42);
+            ->willReturn('test-krevision');
         $functionConfig->method('getRequiredHeaderKey')
             ->willReturn('test-header-key');
         $functionConfig->method('getRequiredOrigin')
@@ -53,14 +53,14 @@ final class JsonSuccessResponseTest extends TestCase
         self::assertTrue($json['success']);
         self::assertMatchesRegularExpression('#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00#', $json['timestamp_iso8601']);
         self::assertIsInt($json['timestamp_unix']);
-        self::assertSame(42, $json['version']);
+        self::assertSame('test-krevision', $json['version']);
     }
 
     public function testJsonError(): void
     {
         $functionConfig = $this->createMock(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
-            ->willReturn(42);
+            ->willReturn('test-krevision');
         $functionConfig->method('getRequiredHeaderKey')
             ->willReturn('test-header-key');
         $functionConfig->method('getRequiredOrigin')
@@ -94,6 +94,6 @@ final class JsonSuccessResponseTest extends TestCase
         self::assertFalse($json['success']);
         self::assertMatchesRegularExpression('#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00#', $json['timestamp_iso8601']);
         self::assertIsInt($json['timestamp_unix']);
-        self::assertSame(42, $json['version']);
+        self::assertSame('test-krevision', $json['version']);
     }
 }
