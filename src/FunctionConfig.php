@@ -7,7 +7,7 @@ namespace ChristianBrown\CloudFunction;
 final class FunctionConfig implements FunctionConfigInterface
 {
     private bool $debug = false;
-    private int $kRevision;
+    private string $kRevision;
     private ?string $requiredHeaderKey = null;
     private ?string $requiredHeaderValue = null;
     private ?string $requiredOrigin = null;
@@ -15,7 +15,7 @@ final class FunctionConfig implements FunctionConfigInterface
     private ?int $useCacheIfErrorTtl = null;
     private ?int $useCacheTtl = null;
 
-    public function __construct(int $kRevision)
+    public function __construct(string $kRevision)
     {
         $this->kRevision = $kRevision;
     }
@@ -25,7 +25,7 @@ final class FunctionConfig implements FunctionConfigInterface
         return $this->debug;
     }
 
-    public function getKrevision(): int
+    public function getKrevision(): string
     {
         return $this->kRevision;
     }
