@@ -3,8 +3,7 @@
     "type": "library",
     "require": {
         "php": "^8.3",
-        "ext-json": "*",
-        "christianjbrown/php-user-friendly-exception-lib": "^1.0.1",
+        "christianjbrown/php-user-friendly-exception-lib": "dev-main",
         "guzzlehttp/guzzle": "^7.9"
     },
     "require-dev": {
