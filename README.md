@@ -1,4 +1,4 @@
-# GCP Function
+# Google Cloud Function framework
 
 [![CI](https://github.com/christianjbrown/php-gcp-function-lib/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-gcp-function-lib/actions/workflows/ci.yml)
 
