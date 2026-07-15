@@ -1,6 +1,6 @@
 # GCP Function
 
-[![CI](https://github.com/christianjbrown/php-gcp-function/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-gcp-function/actions/workflows/ci.yml)
+[![CI](https://github.com/christianjbrown/php-gcp-function-lib/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-gcp-function-lib/actions/workflows/ci.yml)
 
 A strongly-typed PHP 8.3+ framework for building [Google Cloud Run](https://cloud.google.com/run) / [Cloud Functions](https://cloud.google.com/functions) HTTP endpoints that return a **consistent JSON envelope**. You write the business logic; the library handles header-based authorization, CORS, CDN cache-control headers, and uniform success/error responses.
 
@@ -28,7 +28,7 @@ It is built around [PSR-7](https://www.php-fig.org/psr/psr-7/): you hand it a `S
 For your composer-enabled project:
 
 ```bash
-composer require christianjbrown/php-gcp-function
+composer require christianjbrown/php-gcp-function-lib
 ```
 
 
