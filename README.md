@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/christianjbrown/php-gcp-function-lib/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-gcp-function-lib/actions/workflows/ci.yml)
 
-A strongly-typed PHP 8.3+ framework for building [Google Cloud Run](https://cloud.google.com/run) / [Cloud Functions](https://cloud.google.com/functions) HTTP endpoints that return a **consistent JSON envelope**. You write the business logic; the library handles header-based authorization, CORS, CDN cache-control headers, and uniform success/error responses.
+A strongly-typed PHP framework for building [Google Cloud Run](https://cloud.google.com/run) / [Cloud Functions](https://cloud.google.com/functions) HTTP endpoints that return a **consistent JSON envelope**. You write the business logic; the library handles header-based authorization, CORS, CDN cache-control headers, and uniform success/error responses.
 
 It is built around [PSR-7](https://www.php-fig.org/psr/psr-7/): you hand it a `ServerRequestInterface` and it returns a `ResponseInterface`. Configuration is read straight from your Cloud Run environment variables.
 
