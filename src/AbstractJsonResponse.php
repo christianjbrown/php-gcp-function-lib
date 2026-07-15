@@ -11,17 +11,21 @@ use JsonException;
 
 use function gmdate;
 use function implode;
+use function in_array;
+use function is_string;
+use function parse_url;
 use function sprintf;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
+use const PHP_URL_HOST;
 
 abstract class AbstractJsonResponse extends Response implements ResponseInterface
 {
     /**
      * @noinspection PhpUnusedLocalVariableInspection
      */
-    public function __construct(?FunctionConfigInterface $functionConfig, array $data = [], bool $success = true, ?string $error = null, int $statusCode = 200)
+    public function __construct(?FunctionConfigInterface $functionConfig, array $data = [], bool $success = true, ?string $error = null, int $statusCode = 200, ?string $requestOrigin = null)
     {
         $time = time();
 
@@ -60,7 +64,11 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
         if ($functionConfig instanceof FunctionConfigInterface) {
             $requiredOrigin = $functionConfig->getRequiredOrigin();
             if (!empty($requiredOrigin)) {
-                $headers[self::HEADER_KEY_ALLOW_ORIGIN] = $requiredOrigin;
+                $allowOrigin = $requiredOrigin;
+                if (null !== $requestOrigin && self::isLocalOrigin($requestOrigin)) {
+                    $allowOrigin = $requestOrigin;
+                }
+                $headers[self::HEADER_KEY_ALLOW_ORIGIN] = $allowOrigin;
                 $varyList = [self::HEADER_VARY_ACCEPT_ENCODING, self::HEADER_VARY_ORIGIN];
                 $requiredHeaderKey = $functionConfig->getRequiredHeaderKey();
                 if ($requiredHeaderKey) {
@@ -98,5 +106,16 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
         }
 
         parent::__construct($statusCode, $headers, $body);
+    }
+
+    private static function isLocalOrigin(string $origin): bool
+    {
+        if (empty($origin)) {
+            return false;
+        }
+
+        $host = parse_url($origin, PHP_URL_HOST);
+
+        return is_string($host) && in_array($host, self::HOSTS_LOCAL, true);
     }
 }
