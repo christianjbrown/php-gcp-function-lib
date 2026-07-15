@@ -6,6 +6,8 @@ namespace ChristianBrown\GcpFunction;
 
 interface FunctionConfigInterface
 {
+    public function getAllowUnauthenticated(): bool;
+
     public function getDebug(): bool;
 
     public function getKrevision(): string;
@@ -21,6 +23,8 @@ interface FunctionConfigInterface
     public function getUseCacheIfErrorTtl(): ?int;
 
     public function getUseCacheTtl(): ?int;
+
+    public function setAllowUnauthenticated(bool $value): self;
 
     public function setDebug(bool $value): self;
 

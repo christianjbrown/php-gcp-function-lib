@@ -21,6 +21,7 @@ final class FunctionConfigTransformerTest extends TestCase
     public function test(bool $debug): void
     {
         $env = [
+            FunctionConfigTransformerInterface::ENV_ALLOW_UNAUTHENTICATED => 'true',
             FunctionConfigTransformerInterface::ENV_DEBUG => $debug ? 'true' : 'false',
             FunctionConfigTransformerInterface::ENV_K_REVISION => 'test-krevision',
             FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_KEY => 'test-required-header-key',
@@ -33,6 +34,7 @@ final class FunctionConfigTransformerTest extends TestCase
         $transformer = new FunctionConfigTransformer();
         $actual = $transformer->transform($env);
         self::assertSame('test-krevision', $actual->getKrevision());
+        self::assertTrue($actual->getAllowUnauthenticated());
         self::assertSame($debug, $actual->getDebug());
         self::assertSame('test-required-header-key', $actual->getRequiredHeaderKey());
         self::assertSame('test-required-header-value', $actual->getRequiredHeaderValue());
@@ -64,6 +66,7 @@ final class FunctionConfigTransformerTest extends TestCase
         $transformer = new FunctionConfigTransformer();
         $actual = $transformer->transform($env);
         self::assertSame('test-krevision', $actual->getKrevision());
+        self::assertFalse($actual->getAllowUnauthenticated());
         self::assertFalse($actual->getDebug());
         self::assertNull($actual->getRequiredHeaderKey());
         self::assertNull($actual->getRequiredHeaderValue());
@@ -77,6 +80,7 @@ final class FunctionConfigTransformerTest extends TestCase
     {
         $env = [
             FunctionConfigTransformerInterface::ENV_K_REVISION => 'test-krevision',
+            FunctionConfigTransformerInterface::ENV_ALLOW_UNAUTHENTICATED => 'false',
             FunctionConfigTransformerInterface::ENV_DEBUG => 'false',
             FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_KEY => 123,
             FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_VALUE => 456,
@@ -88,6 +92,7 @@ final class FunctionConfigTransformerTest extends TestCase
         $transformer = new FunctionConfigTransformer();
         $actual = $transformer->transform($env);
         self::assertSame('test-krevision', $actual->getKrevision());
+        self::assertFalse($actual->getAllowUnauthenticated());
         self::assertFalse($actual->getDebug());
         self::assertNull($actual->getRequiredHeaderKey());
         self::assertNull($actual->getRequiredHeaderValue());

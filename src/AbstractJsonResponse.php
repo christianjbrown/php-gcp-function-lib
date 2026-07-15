@@ -221,7 +221,7 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
             return $headers;
         }
 
-        $headers[self::HEADER_KEY_ALLOW_ORIGIN] = self::resolveAllowOrigin($requiredOrigin, $requestOrigin);
+        $headers[self::HEADER_KEY_ALLOW_ORIGIN] = self::resolveAllowOrigin($requiredOrigin, $requestOrigin, $functionConfig->getDebug());
 
         $varyList = [self::HEADER_VARY_ACCEPT_ENCODING, self::HEADER_VARY_ORIGIN];
         $requiredHeaderKey = $functionConfig->getRequiredHeaderKey();
@@ -271,9 +271,14 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
         return in_array($host, self::HOSTS_LOCAL, true);
     }
 
-    private static function resolveAllowOrigin(string $requiredOrigin, ?string $requestOrigin): string
+    private static function resolveAllowOrigin(string $requiredOrigin, ?string $requestOrigin, bool $debug): string
     {
         if (null === $requestOrigin) {
+            return $requiredOrigin;
+        }
+        // Reflecting a localhost origin is a development convenience only; never
+        // do it outside debug so production always pins the configured origin.
+        if (!$debug) {
             return $requiredOrigin;
         }
         if (!self::isLocalOrigin($requestOrigin)) {

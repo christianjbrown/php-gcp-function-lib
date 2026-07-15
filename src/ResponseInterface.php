@@ -20,7 +20,6 @@ interface ResponseInterface extends PsrResponseInterface
     public const string HEADER_VARY_ACCEPT_ENCODING = 'Accept-Encoding';
     public const string HEADER_VARY_ORIGIN = 'Origin';
     public const array HEADERS = [
-        self::HEADER_KEY_ALLOW_ORIGIN => '*',
         self::HEADER_KEY_ALLOW_METHODS => 'GET, OPTIONS',
         self::HEADER_KEY_CONTENT_TYPE => self::HEADER_CONTENT_TYPE_VALUE_JSON,
     ];

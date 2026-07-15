@@ -6,6 +6,7 @@ namespace ChristianBrown\GcpFunction;
 
 final class FunctionConfig implements FunctionConfigInterface
 {
+    private bool $allowUnauthenticated = false;
     private bool $debug = false;
     private string $kRevision;
     private ?string $requiredHeaderKey = null;
@@ -18,6 +19,11 @@ final class FunctionConfig implements FunctionConfigInterface
     public function __construct(string $kRevision)
     {
         $this->kRevision = $kRevision;
+    }
+
+    public function getAllowUnauthenticated(): bool
+    {
+        return $this->allowUnauthenticated;
     }
 
     public function getDebug(): bool
@@ -58,6 +64,13 @@ final class FunctionConfig implements FunctionConfigInterface
     public function getUseCacheTtl(): ?int
     {
         return $this->useCacheTtl;
+    }
+
+    public function setAllowUnauthenticated(bool $value): self
+    {
+        $this->allowUnauthenticated = $value;
+
+        return $this;
     }
 
     public function setDebug(bool $value): self

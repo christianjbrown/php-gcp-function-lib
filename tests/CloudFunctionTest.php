@@ -34,10 +34,9 @@ final class CloudFunctionTest extends TestCase
     public function testNoSuccessfulHeaderAbsent(): void
     {
         $request = self::createStub(ServerRequestInterface::class);
-        $request->method('hasHeader')
-            ->willReturn(false);
         $request->method('getHeaderLine')
             ->willReturnMap([
+                ['test-header-key', ''],
                 [ResponseInterface::HEADER_KEY_ORIGIN, ''],
             ]);
 
@@ -64,6 +63,62 @@ final class CloudFunctionTest extends TestCase
         $actual = $cloudFunction->run($request);
 
         self::assertResponseError($actual, CloudFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[TestWith(['test-header-key', null])]
+    #[TestWith([null, 'test-header-value'])]
+    public function testNoSuccessfulPartialGateConfig(?string $requiredHeaderKey, ?string $requiredHeaderValue): void
+    {
+        $request = self::createStub(ServerRequestInterface::class);
+
+        $dataProvider = self::createStub(DataProviderInterface::class);
+        $dataProvider->method('getData')
+            ->willReturn(['test-data']);
+
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
+        $functionConfig->method('getRequiredHeaderKey')
+            ->willReturn($requiredHeaderKey);
+        $functionConfig->method('getRequiredHeaderValue')
+            ->willReturn($requiredHeaderValue);
+        $functionConfig->method('getRequiredOrigin')
+            ->willReturn('test-origin');
+        $functionConfig->method('getKrevision')
+            ->willReturn('test-krevision');
+
+        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+
+        $actual = $cloudFunction->run($request);
+
+        self::assertResponseError($actual, CloudFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', null);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testNoSuccessfulUnauthenticatedNotAllowed(): void
+    {
+        $request = self::createStub(ServerRequestInterface::class);
+
+        $dataProvider = self::createStub(DataProviderInterface::class);
+        $dataProvider->method('getData')
+            ->willReturn(['test-data']);
+
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
+        $functionConfig->method('getAllowUnauthenticated')
+            ->willReturn(false);
+        $functionConfig->method('getRequiredOrigin')
+            ->willReturn('test-origin');
+        $functionConfig->method('getKrevision')
+            ->willReturn('test-krevision');
+
+        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+
+        $actual = $cloudFunction->run($request);
+
+        self::assertResponseError($actual, CloudFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', 'Accept-Encoding,Origin');
     }
 
     /**
@@ -269,6 +324,8 @@ final class CloudFunctionTest extends TestCase
             ->willReturn('test-header-value');
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin');
+        $functionConfig->method('getDebug')
+            ->willReturn(true);
         $functionConfig->method('getKrevision')
             ->willReturn('test-krevision');
         $functionConfig->method('getUseCacheTtl')
@@ -297,6 +354,8 @@ final class CloudFunctionTest extends TestCase
             ->willReturn(['test-data']);
 
         $functionConfig = self::createStub(FunctionConfigInterface::class);
+        $functionConfig->method('getAllowUnauthenticated')
+            ->willReturn(true);
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin');
         $functionConfig->method('getKrevision')

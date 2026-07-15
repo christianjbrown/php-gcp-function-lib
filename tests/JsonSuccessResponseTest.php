@@ -75,7 +75,7 @@ final class JsonSuccessResponseTest extends TestCase
 
         $jsonResponse = new JsonSuccessResponse($functionConfig, ['test-data'], 200);
 
-        self::assertSame('*', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
+        self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
         self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
         self::assertSame('s-maxage=3600, max-age=3600, stale-while-revalidate=7200, stale-if-error=259200', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
         self::assertSame('max-age=3600, stale-while-revalidate=7200, stale-if-error=259200', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
@@ -153,7 +153,7 @@ final class JsonSuccessResponseTest extends TestCase
 
         self::assertSame(123, $jsonResponse->getStatusCode());
         self::assertSame('application/json; charset=utf-8', $jsonResponse->getHeaderLine('Content-Type'));
-        self::assertSame('*', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
+        self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
         self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
         self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
         self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
@@ -176,11 +176,13 @@ final class JsonSuccessResponseTest extends TestCase
     }
 
     #[DataProvider('provideRequestOriginResolvesAllowOriginCases')]
-    public function testRequestOriginResolvesAllowOrigin(string $requestOrigin, string $expectedAllowOrigin): void
+    public function testRequestOriginResolvesAllowOrigin(bool $debug, string $requestOrigin, string $expectedAllowOrigin): void
     {
         $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
             ->willReturn('test-krevision');
+        $functionConfig->method('getDebug')
+            ->willReturn($debug);
         $functionConfig->method('getRequiredHeaderKey')
             ->willReturn('test-header-key');
         $functionConfig->method('getRequiredOrigin')
@@ -199,18 +201,22 @@ final class JsonSuccessResponseTest extends TestCase
     }
 
     /**
-     * @return iterable<string, array{string, string}>
+     * @return iterable<string, array{bool, string, string}>
      */
     public static function provideRequestOriginResolvesAllowOriginCases(): iterable
     {
-        yield 'localhost with port' => ['http://localhost:3000', 'http://localhost:3000'];
-        yield 'loopback ip with port' => ['http://127.0.0.1:8080', 'http://127.0.0.1:8080'];
-        yield 'localhost without port' => ['http://localhost', 'http://localhost'];
-        yield 'https localhost' => ['https://localhost:5173', 'https://localhost:5173'];
-        yield 'non-localhost origin' => ['https://app.example.com', 'test-origin'];
-        yield 'localhost lookalike host' => ['http://localhost.example.com', 'test-origin'];
-        yield 'userinfo trick' => ['http://localhost@example.com', 'test-origin'];
-        yield 'malformed origin' => ['not-a-url', 'test-origin'];
-        yield 'empty origin' => ['', 'test-origin'];
+        // With debug on, a localhost/loopback origin is reflected as a development convenience.
+        yield 'debug localhost with port' => [true, 'http://localhost:3000', 'http://localhost:3000'];
+        yield 'debug loopback ip with port' => [true, 'http://127.0.0.1:8080', 'http://127.0.0.1:8080'];
+        yield 'debug localhost without port' => [true, 'http://localhost', 'http://localhost'];
+        yield 'debug https localhost' => [true, 'https://localhost:5173', 'https://localhost:5173'];
+        yield 'debug non-localhost origin' => [true, 'https://app.example.com', 'test-origin'];
+        yield 'debug localhost lookalike host' => [true, 'http://localhost.example.com', 'test-origin'];
+        yield 'debug userinfo trick' => [true, 'http://localhost@example.com', 'test-origin'];
+        yield 'debug malformed origin' => [true, 'not-a-url', 'test-origin'];
+        yield 'debug empty origin' => [true, '', 'test-origin'];
+        // With debug off (production), the configured origin is always pinned, never reflected.
+        yield 'no-debug localhost pinned' => [false, 'http://localhost:3000', 'test-origin'];
+        yield 'no-debug non-localhost pinned' => [false, 'https://app.example.com', 'test-origin'];
     }
 }

@@ -31,6 +31,7 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
 
         // Optional values
 
+        self::applyAllowUnauthenticated($config, $env);
         self::applyDebug($config, $env);
         self::applyRequiredHeaderKey($config, $env);
         self::applyRequiredHeaderValue($config, $env);
@@ -40,6 +41,17 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         self::applyUseCacheIfErrorTtl($config, $env);
 
         return $config;
+    }
+
+    private static function applyAllowUnauthenticated(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_ALLOW_UNAUTHENTICATED])) {
+            return;
+        }
+        if ('true' !== $env[self::ENV_ALLOW_UNAUTHENTICATED]) {
+            return;
+        }
+        $config->setAllowUnauthenticated(true);
     }
 
     private static function applyDebug(FunctionConfigInterface $config, array $env): void

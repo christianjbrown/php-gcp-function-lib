@@ -8,6 +8,8 @@ use ChristianBrown\UserFriendlyException\UserFriendlyExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
+use function hash_equals;
+
 final class CloudFunction implements CloudFunctionInterface
 {
     private DataProviderInterface $dataProvider;
@@ -54,14 +56,28 @@ final class CloudFunction implements CloudFunctionInterface
 
     private static function isAuthorized(ServerRequestInterface $request, FunctionConfigInterface $config): bool
     {
-        $requiredHeaderKey = $config->getRequiredHeaderKey();
-        if (!$requiredHeaderKey) {
-            return true;
-        }
-        if (!$request->hasHeader($requiredHeaderKey)) {
+        $requiredHeaderKey = (string) $config->getRequiredHeaderKey();
+        $requiredHeaderValue = (string) $config->getRequiredHeaderValue();
+
+        if ('' === $requiredHeaderKey) {
+            // Neither part of the gate is configured: this is only allowed when
+            // the function is explicitly opted in to unauthenticated access, so
+            // a dropped/emptied secret fails closed instead of silently opening.
+            if ('' === $requiredHeaderValue) {
+                return $config->getAllowUnauthenticated();
+            }
+
+            // Only the value is configured: a partial gate is a misconfiguration
+            // and is treated as deny.
             return false;
         }
 
-        return $config->getRequiredHeaderValue() === $request->getHeaderLine($requiredHeaderKey);
+        // Only the key is configured: a partial gate is a misconfiguration and
+        // is treated as deny.
+        if ('' === $requiredHeaderValue) {
+            return false;
+        }
+
+        return hash_equals($requiredHeaderValue, $request->getHeaderLine($requiredHeaderKey));
     }
 }

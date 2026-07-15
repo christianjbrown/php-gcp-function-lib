@@ -16,6 +16,7 @@ final class FunctionConfigTest extends TestCase
         $functionConfig = new FunctionConfig('test-krevision');
         self::assertSame('test-krevision', $functionConfig->getKrevision());
 
+        self::assertFalse($functionConfig->getAllowUnauthenticated());
         self::assertFalse($functionConfig->getDebug());
         self::assertNull($functionConfig->getRequiredHeaderKey());
         self::assertNull($functionConfig->getRequiredHeaderValue());
@@ -24,6 +25,7 @@ final class FunctionConfigTest extends TestCase
         self::assertNull($functionConfig->getUseCacheButRequestTtl());
         self::assertNull($functionConfig->getUseCacheIfErrorTtl());
 
+        $functionConfig->setAllowUnauthenticated(true);
         $functionConfig->setDebug(true);
         $functionConfig->setRequiredHeaderKey('test-required-header-key');
         $functionConfig->setRequiredHeaderValue('test-required-header-value');
