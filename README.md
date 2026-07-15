@@ -1,4 +1,4 @@
-# Overview
+# Cloud Function
 
 [![CI](https://github.com/christianjbrown/php-cloud-function-lib/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-cloud-function-lib/actions/workflows/ci.yml)
 
