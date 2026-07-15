@@ -42,6 +42,7 @@ final class JsonSuccessResponseTest extends TestCase
 
         $json = json_decode($jsonResponse->getBody()->getContents(), true);
 
+        self::assertIsArray($json);
         self::assertArrayNotHasKey('error', $json);
         self::assertArrayHasKey('data', $json);
         self::assertArrayHasKey('success', $json);
@@ -51,9 +52,38 @@ final class JsonSuccessResponseTest extends TestCase
 
         self::assertSame(['test-data'], $json['data']);
         self::assertTrue($json['success']);
+        self::assertIsString($json['timestamp_iso8601']);
         self::assertMatchesRegularExpression('#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00#', $json['timestamp_iso8601']);
         self::assertIsInt($json['timestamp_unix']);
         self::assertSame('test-krevision', $json['version']);
+    }
+
+    public function testNoFunctionConfig(): void
+    {
+        $jsonResponse = new JsonSuccessResponse(null, ['test-data'], 123);
+
+        self::assertSame(123, $jsonResponse->getStatusCode());
+        self::assertSame('application/json; charset=utf-8', $jsonResponse->getHeaderLine('Content-Type'));
+        self::assertSame('*', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
+        self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
+        self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
+        self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
+
+        $json = json_decode($jsonResponse->getBody()->getContents(), true);
+
+        self::assertIsArray($json);
+        self::assertArrayNotHasKey('error', $json);
+        self::assertArrayNotHasKey('version', $json);
+        self::assertArrayHasKey('data', $json);
+        self::assertArrayHasKey('success', $json);
+        self::assertArrayHasKey('timestamp_iso8601', $json);
+        self::assertArrayHasKey('timestamp_unix', $json);
+
+        self::assertSame(['test-data'], $json['data']);
+        self::assertTrue($json['success']);
+        self::assertIsString($json['timestamp_iso8601']);
+        self::assertMatchesRegularExpression('#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00#', $json['timestamp_iso8601']);
+        self::assertIsInt($json['timestamp_unix']);
     }
 
     public function testJsonError(): void
@@ -83,6 +113,7 @@ final class JsonSuccessResponseTest extends TestCase
 
         $json = json_decode($jsonResponse->getBody()->getContents(), true);
 
+        self::assertIsArray($json);
         self::assertArrayHasKey('error', $json);
         self::assertArrayNotHasKey('data', $json);
         self::assertArrayHasKey('success', $json);
@@ -92,6 +123,7 @@ final class JsonSuccessResponseTest extends TestCase
 
         self::assertSame(ResponseInterface::ERROR_JSON_ENCODING, $json['error']);
         self::assertFalse($json['success']);
+        self::assertIsString($json['timestamp_iso8601']);
         self::assertMatchesRegularExpression('#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00#', $json['timestamp_iso8601']);
         self::assertIsInt($json['timestamp_unix']);
         self::assertSame('test-krevision', $json['version']);

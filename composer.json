@@ -1,6 +1,10 @@
 {
     "name": "christianjbrown/php-cloud-function-lib",
+    "description": "A strongly-typed PHP 8.3+ framework for building Google Cloud Run / Cloud Functions HTTP endpoints that return a consistent JSON envelope with built-in header auth, CORS, and CDN cache-control headers.",
     "type": "library",
+    "license": "MIT",
+    "keywords": ["google-cloud", "cloud-run", "cloud-functions", "serverless", "psr-7", "json-api"],
+    "authors": [{ "name": "Christian Brown" }],
     "require": {
         "php": "^8.3",
         "christianjbrown/php-user-friendly-exception-lib": "dev-main",
@@ -8,11 +12,16 @@
     },
     "require-dev": {
         "christianjbrown/php-code-quality-scripts": "dev-main",
+        "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^12.0"
     },
     "autoload": {
         "psr-4": {
-            "ChristianBrown\\CloudFunction\\": "src/",
+            "ChristianBrown\\CloudFunction\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "ChristianBrown\\CloudFunction\\Tests\\": "tests/"
         }
     },
@@ -21,7 +30,7 @@
     },
     "scripts": {
         "test": [
-            "clear && XDEBUG_MODE=coverage ./bin/phpunit -d memory_limit=512M && open ./.phpunit.cache/code-coverage-html/index.html"
+            "clear && XDEBUG_MODE=coverage php -d memory_limit=-1 ./bin/phpunit && open ./.phpunit.cache/code-coverage-html/index.html"
         ],
         "check-style": [
             "clear && ./bin/php-cs ./src ./tests"
@@ -34,6 +43,9 @@
         ],
         "fix-style-diff": [
             "clear && ./bin/php-cs-fix-diff"
+        ],
+        "stan": [
+            "clear && ./bin/phpstan analyse"
         ]
     },
     "repositories": [
@@ -45,5 +57,6 @@
             "type": "github",
             "url": "git@github.com:christianjbrown/php-user-friendly-exception-lib.git"
         }
-    ]
+    ],
+    "minimum-stability": "dev"
 }

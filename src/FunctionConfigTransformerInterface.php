@@ -15,5 +15,8 @@ interface FunctionConfigTransformerInterface
     public const string ENV_USE_CACHE_IF_ERROR_TTL = 'USE_CACHE_IF_ERROR_TTL';
     public const string ENV_USE_CACHE_TTL = 'USE_CACHE_TTL';
 
+    /**
+     * @param mixed[] $env
+     */
     public function transform(array $env): FunctionConfigInterface;
 }
