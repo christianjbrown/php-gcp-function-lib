@@ -6,8 +6,8 @@ namespace ChristianBrown\CloudFunction;
 
 final class JsonSuccessResponse extends AbstractJsonResponse implements JsonSuccessResponseInterface
 {
-    public function __construct(?FunctionConfigInterface $functionConfig, array $data = [], int $statusCode = 200)
+    public function __construct(?FunctionConfigInterface $functionConfig, array $data = [], int $statusCode = 200, ?string $requestOrigin = null)
     {
-        parent::__construct($functionConfig, $data, true, null, $statusCode);
+        parent::__construct($functionConfig, $data, true, null, $statusCode, $requestOrigin);
     }
 }
