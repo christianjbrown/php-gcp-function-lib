@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\CloudFunction\Tests;
+namespace ChristianBrown\GcpFunction\Tests;
 
-use ChristianBrown\CloudFunction\FunctionConfig;
+use ChristianBrown\GcpFunction\FunctionConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 

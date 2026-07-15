@@ -39,8 +39,8 @@ secret. Always run `composer fix-style` first (php-cs-fixer auto-fixes what it c
 
 ## Architecture
 
-Everything lives directly under `src/` (no sub-layers). PSR-4: `ChristianBrown\CloudFunction\` →
-`src/`, `ChristianBrown\CloudFunction\Tests\` → `tests/`.
+Everything lives directly under `src/` (no sub-layers). PSR-4: `ChristianBrown\GcpFunction\` →
+`src/`, `ChristianBrown\GcpFunction\Tests\` → `tests/`.
 
 - **`CloudFunction`** (`src/CloudFunction.php`) — the entry point. Constructed with a
   `DataProviderInterface` + `FunctionConfigInterface`. Its `run()` checks header authorization

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\CloudFunction\Tests;
+namespace ChristianBrown\GcpFunction\Tests;
 
-use ChristianBrown\CloudFunction\AbstractJsonResponse;
-use ChristianBrown\CloudFunction\FunctionConfigInterface;
-use ChristianBrown\CloudFunction\JsonErrorResponse;
-use ChristianBrown\CloudFunction\ResponseInterface;
+use ChristianBrown\GcpFunction\AbstractJsonResponse;
+use ChristianBrown\GcpFunction\FunctionConfigInterface;
+use ChristianBrown\GcpFunction\JsonErrorResponse;
+use ChristianBrown\GcpFunction\ResponseInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\CloudFunction;
+namespace ChristianBrown\GcpFunction;
 
 final class JsonErrorResponse extends AbstractJsonResponse implements JsonErrorResponseInterface
 {
