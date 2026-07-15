@@ -53,7 +53,7 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
             /**
              * @noinspection PhpUsageOfSilenceOperatorInspection
              */
-            $body = @json_encode($bodyJson, JSON_PRETTY_PRINT);
+            $body = @json_encode($bodyJson, JSON_PRETTY_PRINT) ?: '';
         }
 
         $headers = self::HEADERS;
@@ -70,7 +70,7 @@ abstract class AbstractJsonResponse extends Response implements ResponseInterfac
             }
         }
 
-        if ($success) {
+        if ($success && $functionConfig instanceof FunctionConfigInterface) {
             $cacheControlParts = [];
             $surrogateControlParts = [];
             if ($functionConfig->getUseCacheTtl()) {

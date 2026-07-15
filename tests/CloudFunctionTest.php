@@ -249,6 +249,7 @@ final class CloudFunctionTest extends TestCase
 
         $json = json_decode($response->getBody()->getContents(), true);
 
+        self::assertIsArray($json);
         self::assertArrayHasKey('error', $json);
         self::assertArrayNotHasKey('data', $json);
         self::assertArrayHasKey('success', $json);
@@ -258,6 +259,7 @@ final class CloudFunctionTest extends TestCase
 
         self::assertSame($expectedError, $json['error']);
         self::assertFalse($json['success']);
+        self::assertIsString($json['timestamp_iso8601']);
         self::assertMatchesRegularExpression('#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00#', $json['timestamp_iso8601']);
         self::assertIsInt($json['timestamp_unix']);
         self::assertSame($expectedVersion, $json['version']);
@@ -280,6 +282,7 @@ final class CloudFunctionTest extends TestCase
 
         $json = json_decode($response->getBody()->getContents(), true);
 
+        self::assertIsArray($json);
         self::assertArrayNotHasKey('error', $json);
         self::assertArrayHasKey('data', $json);
         self::assertArrayHasKey('success', $json);
@@ -289,6 +292,7 @@ final class CloudFunctionTest extends TestCase
 
         self::assertSame($expectedData, $json['data']);
         self::assertTrue($json['success']);
+        self::assertIsString($json['timestamp_iso8601']);
         self::assertMatchesRegularExpression('#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00#', $json['timestamp_iso8601']);
         self::assertIsInt($json['timestamp_unix']);
         self::assertSame($expectedVersion, $json['version']);

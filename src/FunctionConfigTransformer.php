@@ -14,6 +14,9 @@ use function sprintf;
 
 final class FunctionConfigTransformer implements FunctionConfigTransformerInterface
 {
+    /**
+     * @param mixed[] $env
+     */
     public function transform(array $env): FunctionConfigInterface
     {
         // Required values
