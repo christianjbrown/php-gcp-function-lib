@@ -4,7 +4,11 @@
     "type": "library",
     "license": "MIT",
     "keywords": ["google-cloud", "cloud-run", "cloud-functions", "serverless", "psr-7", "json-api"],
-    "authors": [{ "name": "Christian Brown" }],
+    "authors": [
+        {
+            "name": "Christian Brown"
+        }
+    ],
     "require": {
         "php": "^8.3",
         "christianjbrown/php-user-friendly-exception-lib": "dev-main",
@@ -25,12 +29,12 @@
             "ChristianBrown\\CloudFunction\\Tests\\": "tests/"
         }
     },
-    "config": {
-        "bin-dir": "bin"
-    },
     "scripts": {
         "test": [
             "clear && XDEBUG_MODE=coverage php -d memory_limit=-1 ./bin/phpunit && open ./.phpunit.cache/code-coverage-html/index.html"
+        ],
+        "stan": [
+            "clear && ./bin/phpstan analyse"
         ],
         "check-style": [
             "clear && ./bin/php-cs ./src ./tests"
@@ -43,10 +47,10 @@
         ],
         "fix-style-diff": [
             "clear && ./bin/php-cs-fix-diff"
-        ],
-        "stan": [
-            "clear && ./bin/phpstan analyse"
         ]
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "repositories": [
         {
