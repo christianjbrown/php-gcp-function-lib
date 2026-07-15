@@ -1,6 +1,6 @@
-# Cloud Function
+# GCP Function
 
-[![CI](https://github.com/christianjbrown/php-cloud-function-lib/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-cloud-function-lib/actions/workflows/ci.yml)
+[![CI](https://github.com/christianjbrown/php-gcp-function/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-gcp-function/actions/workflows/ci.yml)
 
 A strongly-typed PHP 8.3+ framework for building [Google Cloud Run](https://cloud.google.com/run) / [Cloud Functions](https://cloud.google.com/functions) HTTP endpoints that return a **consistent JSON envelope**. You write the business logic; the library handles header-based authorization, CORS, CDN cache-control headers, and uniform success/error responses.
 
@@ -28,7 +28,7 @@ It is built around [PSR-7](https://www.php-fig.org/psr/psr-7/): you hand it a `S
 For your composer-enabled project:
 
 ```bash
-composer require christianjbrown/php-cloud-function-lib
+composer require christianjbrown/php-gcp-function
 ```
 
 
@@ -38,7 +38,7 @@ composer require christianjbrown/php-cloud-function-lib
 Implement `DataProviderInterface` with your endpoint's logic — it receives the PSR-7 request and returns an array that becomes the response `data`:
 
 ```php
-use ChristianBrown\CloudFunction\DataProviderInterface;
+use ChristianBrown\GcpFunction\DataProviderInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class MyDataProvider implements DataProviderInterface
@@ -58,8 +58,8 @@ final class MyDataProvider implements DataProviderInterface
 Build a `FunctionConfig` from your Cloud Run environment variables with `FunctionConfigTransformer`, wire it into a `CloudFunction`, and run the request:
 
 ```php
-use ChristianBrown\CloudFunction\CloudFunction;
-use ChristianBrown\CloudFunction\FunctionConfigTransformer;
+use ChristianBrown\GcpFunction\CloudFunction;
+use ChristianBrown\GcpFunction\FunctionConfigTransformer;
 
 $config = (new FunctionConfigTransformer())->transform($_ENV);
 

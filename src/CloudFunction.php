@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\CloudFunction;
+namespace ChristianBrown\GcpFunction;
 
 use ChristianBrown\UserFriendlyException\UserFriendlyExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface;

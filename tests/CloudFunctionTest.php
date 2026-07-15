@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\CloudFunction\Tests;
+namespace ChristianBrown\GcpFunction\Tests;
 
-use ChristianBrown\CloudFunction\AbstractJsonResponse;
-use ChristianBrown\CloudFunction\CloudFunction;
-use ChristianBrown\CloudFunction\CloudFunctionInterface;
-use ChristianBrown\CloudFunction\DataProviderInterface;
-use ChristianBrown\CloudFunction\FunctionConfigInterface;
-use ChristianBrown\CloudFunction\JsonErrorResponse;
-use ChristianBrown\CloudFunction\JsonErrorResponseInterface;
-use ChristianBrown\CloudFunction\JsonSuccessResponse;
-use ChristianBrown\CloudFunction\JsonSuccessResponseInterface;
-use ChristianBrown\CloudFunction\ResponseInterface;
+use ChristianBrown\GcpFunction\AbstractJsonResponse;
+use ChristianBrown\GcpFunction\CloudFunction;
+use ChristianBrown\GcpFunction\CloudFunctionInterface;
+use ChristianBrown\GcpFunction\DataProviderInterface;
+use ChristianBrown\GcpFunction\FunctionConfigInterface;
+use ChristianBrown\GcpFunction\JsonErrorResponse;
+use ChristianBrown\GcpFunction\JsonErrorResponseInterface;
+use ChristianBrown\GcpFunction\JsonSuccessResponse;
+use ChristianBrown\GcpFunction\JsonSuccessResponseInterface;
+use ChristianBrown\GcpFunction\ResponseInterface;
 use ChristianBrown\UserFriendlyException\UserFriendlyException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;

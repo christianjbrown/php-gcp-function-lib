@@ -1,5 +1,5 @@
 {
-    "name": "christianjbrown/php-cloud-function-lib",
+    "name": "christianjbrown/php-gcp-function",
     "description": "A strongly-typed PHP 8.3+ framework for building Google Cloud Run / Cloud Functions HTTP endpoints that return a consistent JSON envelope with built-in header auth, CORS, and CDN cache-control headers.",
     "type": "library",
     "license": "MIT",
@@ -21,12 +21,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ChristianBrown\\CloudFunction\\": "src/"
+            "ChristianBrown\\GcpFunction\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ChristianBrown\\CloudFunction\\Tests\\": "tests/"
+            "ChristianBrown\\GcpFunction\\Tests\\": "tests/"
         }
     },
     "scripts": {

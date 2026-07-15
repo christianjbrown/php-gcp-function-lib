@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\CloudFunction;
+namespace ChristianBrown\GcpFunction;
 
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 
