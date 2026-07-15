@@ -31,11 +31,48 @@ final class CloudFunctionTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testNoSuccessfulHeaderAbsent(): void
+    {
+        $request = self::createStub(ServerRequestInterface::class);
+        $request->method('hasHeader')
+            ->willReturn(false);
+        $request->method('getHeaderLine')
+            ->willReturnMap([
+                [ResponseInterface::HEADER_KEY_ORIGIN, ''],
+            ]);
+
+        $dataProvider = self::createStub(DataProviderInterface::class);
+
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
+        $functionConfig->method('getRequiredHeaderKey')
+            ->willReturn('test-header-key');
+        $functionConfig->method('getRequiredHeaderValue')
+            ->willReturn('test-header-value');
+        $functionConfig->method('getRequiredOrigin')
+            ->willReturn('test-origin');
+        $functionConfig->method('getKrevision')
+            ->willReturn('test-krevision');
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600);
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200);
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200);
+
+        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+
+        $actual = $cloudFunction->run($request);
+
+        self::assertResponseError($actual, CloudFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testNoSuccessfulUnauthorised(): void
     {
-        $request = $this->createMock(ServerRequestInterface::class);
+        $request = self::createStub(ServerRequestInterface::class);
         $request->method('hasHeader')
-            ->with('test-header-key')
             ->willReturn(true);
         $request->method('getHeaderLine')
             ->willReturnMap([
@@ -43,11 +80,11 @@ final class CloudFunctionTest extends TestCase
                 [ResponseInterface::HEADER_KEY_ORIGIN, ''],
             ]);
 
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = self::createStub(DataProviderInterface::class);
         $dataProvider->method('getData')
             ->willReturn(['test-data']);
 
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredHeaderKey')
             ->willReturn('test-header-key');
         $functionConfig->method('getRequiredHeaderValue')
@@ -75,9 +112,8 @@ final class CloudFunctionTest extends TestCase
      */
     public function testNotSuccessfulFriendlyException(): void
     {
-        $request = $this->createMock(ServerRequestInterface::class);
+        $request = self::createStub(ServerRequestInterface::class);
         $request->method('hasHeader')
-            ->with('test-header-key')
             ->willReturn(true);
         $request->method('getHeaderLine')
             ->willReturnMap([
@@ -88,11 +124,11 @@ final class CloudFunctionTest extends TestCase
         // Cannot mock getMessage in Exception because it is final, need to use a real class
         $userFriendlyException = new UserFriendlyException('test-friendly-error-message');
 
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = self::createStub(DataProviderInterface::class);
         $dataProvider->method('getData')
             ->willThrowException($userFriendlyException);
 
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredHeaderKey')
             ->willReturn('test-header-key');
         $functionConfig->method('getRequiredHeaderValue')
@@ -122,9 +158,8 @@ final class CloudFunctionTest extends TestCase
     #[TestWith([false])]
     public function testNotSuccessfulThrowable(bool $debug): void
     {
-        $request = $this->createMock(ServerRequestInterface::class);
+        $request = self::createStub(ServerRequestInterface::class);
         $request->method('hasHeader')
-            ->with('test-header-key')
             ->willReturn(true);
         $request->method('getHeaderLine')
             ->willReturnMap([
@@ -135,11 +170,11 @@ final class CloudFunctionTest extends TestCase
         // Cannot mock getMessage in Exception because it is final, need to use a real class
         $exception = new RuntimeException('test-exception-message');
 
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = self::createStub(DataProviderInterface::class);
         $dataProvider->method('getData')
             ->willThrowException($exception);
 
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredHeaderKey')
             ->willReturn('test-header-key');
         $functionConfig->method('getRequiredHeaderValue')
@@ -173,9 +208,8 @@ final class CloudFunctionTest extends TestCase
      */
     public function testSuccess(): void
     {
-        $request = $this->createMock(ServerRequestInterface::class);
+        $request = self::createStub(ServerRequestInterface::class);
         $request->method('hasHeader')
-            ->with('test-header-key')
             ->willReturn(true);
         $request->method('getHeaderLine')
             ->willReturnMap([
@@ -183,11 +217,11 @@ final class CloudFunctionTest extends TestCase
                 [ResponseInterface::HEADER_KEY_ORIGIN, ''],
             ]);
 
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = self::createStub(DataProviderInterface::class);
         $dataProvider->method('getData')
             ->willReturn(['test-data']);
 
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredHeaderKey')
             ->willReturn('test-header-key');
         $functionConfig->method('getRequiredHeaderValue')
@@ -215,9 +249,8 @@ final class CloudFunctionTest extends TestCase
      */
     public function testSuccessLocalhostOriginEchoed(): void
     {
-        $request = $this->createMock(ServerRequestInterface::class);
+        $request = self::createStub(ServerRequestInterface::class);
         $request->method('hasHeader')
-            ->with('test-header-key')
             ->willReturn(true);
         $request->method('getHeaderLine')
             ->willReturnMap([
@@ -225,11 +258,11 @@ final class CloudFunctionTest extends TestCase
                 [ResponseInterface::HEADER_KEY_ORIGIN, 'http://localhost:5173'],
             ]);
 
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = self::createStub(DataProviderInterface::class);
         $dataProvider->method('getData')
             ->willReturn(['test-data']);
 
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredHeaderKey')
             ->willReturn('test-header-key');
         $functionConfig->method('getRequiredHeaderValue')
@@ -257,13 +290,13 @@ final class CloudFunctionTest extends TestCase
      */
     public function testSuccessNoAuth(): void
     {
-        $request = $this->createMock(ServerRequestInterface::class);
+        $request = self::createStub(ServerRequestInterface::class);
 
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = self::createStub(DataProviderInterface::class);
         $dataProvider->method('getData')
             ->willReturn(['test-data']);
 
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getRequiredOrigin')
             ->willReturn('test-origin');
         $functionConfig->method('getKrevision')

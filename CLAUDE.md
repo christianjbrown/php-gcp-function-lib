@@ -98,7 +98,10 @@ The `phpunit.xml` config is strict (`requireCoverageMetadata`, `beStrictAboutCov
   fails. Use PHPUnit 12 **attributes, not annotations**: `#[CoversClass]`, `#[DataProvider]`,
   `#[TestWith]`.
 - One `final class XTest extends TestCase` per production class, methods named `test<Scenario>`.
-- Mock every collaborator with `$this->createMock(SomeInterface::class)`; assert statically
+- Double every collaborator with `$this->createStub(SomeInterface::class)` (these tests assert on the
+  produced response, not on interactions — PHPUnit 12.5 emits a notice for a `createMock()` used without
+  expectations). Reserve `$this->createMock(...)` + `->expects(...)` for the rare test that must verify a
+  call. Do not call `->with(...)` on a stub — it is a no-op and deprecated. Assert statically
   (`self::assertSame`). Reference the **same interface constants** production code uses — for both
   data keys and expected messages — so no strings are hardcoded.
 

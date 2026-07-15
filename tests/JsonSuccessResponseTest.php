@@ -18,7 +18,7 @@ final class JsonSuccessResponseTest extends TestCase
 {
     public function test(): void
     {
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
             ->willReturn('test-krevision');
         $functionConfig->method('getRequiredHeaderKey')
@@ -59,9 +59,31 @@ final class JsonSuccessResponseTest extends TestCase
         self::assertSame('test-krevision', $json['version']);
     }
 
+    public function testEmptyRequiredOrigin(): void
+    {
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
+        $functionConfig->method('getKrevision')
+            ->willReturn('test-krevision');
+        $functionConfig->method('getRequiredOrigin')
+            ->willReturn('');
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600);
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200);
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200);
+
+        $jsonResponse = new JsonSuccessResponse($functionConfig, ['test-data'], 200);
+
+        self::assertSame('*', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
+        self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
+        self::assertSame('s-maxage=3600, max-age=3600, stale-while-revalidate=7200, stale-if-error=259200', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
+        self::assertSame('max-age=3600, stale-while-revalidate=7200, stale-if-error=259200', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
+    }
+
     public function testJsonError(): void
     {
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
             ->willReturn('test-krevision');
         $functionConfig->method('getRequiredHeaderKey')
@@ -102,6 +124,29 @@ final class JsonSuccessResponseTest extends TestCase
         self::assertSame('test-krevision', $json['version']);
     }
 
+    public function testNoCacheTtls(): void
+    {
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
+        $functionConfig->method('getKrevision')
+            ->willReturn('test-krevision');
+        $functionConfig->method('getRequiredHeaderKey')
+            ->willReturn('test-header-key');
+        $functionConfig->method('getRequiredOrigin')
+            ->willReturn('test-origin');
+
+        $jsonResponse = new JsonSuccessResponse($functionConfig, ['test-data'], 200);
+
+        self::assertSame('test-origin', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_ALLOW_ORIGIN));
+        self::assertSame('Accept-Encoding,Origin,test-header-key', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_VARY));
+        self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_CACHE_CONTROL));
+        self::assertSame('', $jsonResponse->getHeaderLine(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL));
+
+        $json = json_decode($jsonResponse->getBody()->getContents(), true);
+
+        self::assertIsArray($json);
+        self::assertTrue($json['success']);
+    }
+
     public function testNoFunctionConfig(): void
     {
         $jsonResponse = new JsonSuccessResponse(null, ['test-data'], 123);
@@ -133,7 +178,7 @@ final class JsonSuccessResponseTest extends TestCase
     #[DataProvider('provideRequestOriginResolvesAllowOriginCases')]
     public function testRequestOriginResolvesAllowOrigin(string $requestOrigin, string $expectedAllowOrigin): void
     {
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
             ->willReturn('test-krevision');
         $functionConfig->method('getRequiredHeaderKey')

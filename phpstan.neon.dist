@@ -10,4 +10,4 @@ parameters:
         # array value type is intentionally left unspecified on these arbitrary-shape payloads.
         -
             identifier: missingType.iterableValue
-            message: '#(__construct|assertResponseSuccess)\(\) has parameter \$(data|expectedData) with no value type specified in iterable type array#'
+            message: '#(__construct|assertResponseSuccess|buildBody|apply\w+)\(\) has parameter \$(data|expectedData|env) with no value type specified in iterable type array#'

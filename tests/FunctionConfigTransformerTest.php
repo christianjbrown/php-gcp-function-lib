@@ -55,4 +55,45 @@ final class FunctionConfigTransformerTest extends TestCase
         $this->expectExceptionMessage(sprintf('%s not set or not a string', FunctionConfigTransformerInterface::ENV_K_REVISION));
         $transformer->transform($env);
     }
+
+    public function testMinimalEnv(): void
+    {
+        $env = [
+            FunctionConfigTransformerInterface::ENV_K_REVISION => 'test-krevision',
+        ];
+        $transformer = new FunctionConfigTransformer();
+        $actual = $transformer->transform($env);
+        self::assertSame('test-krevision', $actual->getKrevision());
+        self::assertFalse($actual->getDebug());
+        self::assertNull($actual->getRequiredHeaderKey());
+        self::assertNull($actual->getRequiredHeaderValue());
+        self::assertNull($actual->getRequiredOrigin());
+        self::assertNull($actual->getUseCacheTtl());
+        self::assertNull($actual->getUseCacheButRequestTtl());
+        self::assertNull($actual->getUseCacheIfErrorTtl());
+    }
+
+    public function testNonStringOptionalsAreIgnored(): void
+    {
+        $env = [
+            FunctionConfigTransformerInterface::ENV_K_REVISION => 'test-krevision',
+            FunctionConfigTransformerInterface::ENV_DEBUG => 'false',
+            FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_KEY => 123,
+            FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_VALUE => 456,
+            FunctionConfigTransformerInterface::ENV_REQUIRED_ORIGIN => 789,
+            FunctionConfigTransformerInterface::ENV_USE_CACHE_TTL => 'not-numeric',
+            FunctionConfigTransformerInterface::ENV_USE_CACHE_BUT_REQUEST_TTL => 'not-numeric',
+            FunctionConfigTransformerInterface::ENV_USE_CACHE_IF_ERROR_TTL => 'not-numeric',
+        ];
+        $transformer = new FunctionConfigTransformer();
+        $actual = $transformer->transform($env);
+        self::assertSame('test-krevision', $actual->getKrevision());
+        self::assertFalse($actual->getDebug());
+        self::assertNull($actual->getRequiredHeaderKey());
+        self::assertNull($actual->getRequiredHeaderValue());
+        self::assertNull($actual->getRequiredOrigin());
+        self::assertNull($actual->getUseCacheTtl());
+        self::assertNull($actual->getUseCacheButRequestTtl());
+        self::assertNull($actual->getUseCacheIfErrorTtl());
+    }
 }
