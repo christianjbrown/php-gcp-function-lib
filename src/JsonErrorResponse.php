@@ -6,8 +6,8 @@ namespace ChristianBrown\CloudFunction;
 
 final class JsonErrorResponse extends AbstractJsonResponse implements JsonErrorResponseInterface
 {
-    public function __construct(?FunctionConfigInterface $functionConfig, ?string $error = null, int $statusCode = self::DEFAULT_ERROR_STATUS_CODE)
+    public function __construct(?FunctionConfigInterface $functionConfig, ?string $error = null, int $statusCode = self::DEFAULT_ERROR_STATUS_CODE, ?string $requestOrigin = null)
     {
-        parent::__construct($functionConfig, [], false, $error, $statusCode);
+        parent::__construct($functionConfig, [], false, $error, $statusCode, $requestOrigin);
     }
 }
