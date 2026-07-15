@@ -17,7 +17,7 @@ final class JsonErrorResponseTest extends TestCase
 {
     public function test(): void
     {
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
             ->willReturn('test-krevision');
         $functionConfig->method('getRequiredHeaderKey')
@@ -54,7 +54,7 @@ final class JsonErrorResponseTest extends TestCase
 
     public function testJsonError(): void
     {
-        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
         $functionConfig->method('getKrevision')
             ->willReturn('test-krevision');
         $functionConfig->method('getRequiredHeaderKey')

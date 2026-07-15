@@ -24,38 +24,44 @@ final class CloudFunction implements CloudFunctionInterface
         $requestOrigin = $request->getHeaderLine(ResponseInterface::HEADER_KEY_ORIGIN);
 
         try {
-            $isAuthorized = self::isAuthorized($request, $this->functionConfig);
-            if (!$isAuthorized) {
-                return new JsonErrorResponse($this->functionConfig, self::ERROR_NOT_AUTHORIZED, 401, $requestOrigin);
-            }
-
-            $data = $this->dataProvider->getData($request);
-
-            $response = new JsonSuccessResponse($this->functionConfig, $data, 200, $requestOrigin);
+            return $this->handle($request, $requestOrigin);
         } catch (UserFriendlyExceptionInterface $exception) {
-            $response = new JsonErrorResponse($this->functionConfig, $exception->getMessage(), JsonErrorResponseInterface::DEFAULT_ERROR_STATUS_CODE, $requestOrigin);
+            return new JsonErrorResponse($this->functionConfig, $exception->getMessage(), JsonErrorResponseInterface::DEFAULT_ERROR_STATUS_CODE, $requestOrigin);
         } catch (Throwable $exception) {
-            if ($this->functionConfig->getDebug()) {
-                $response = new JsonErrorResponse($this->functionConfig, $exception->getMessage(), JsonErrorResponseInterface::DEFAULT_ERROR_STATUS_CODE, $requestOrigin);
-            } else {
-                $response = new JsonErrorResponse($this->functionConfig, self::ERROR_UNHANDLED, JsonErrorResponseInterface::DEFAULT_ERROR_STATUS_CODE, $requestOrigin);
-            }
+            return $this->buildUnhandledResponse($exception, $requestOrigin);
+        }
+    }
+
+    private function buildUnhandledResponse(Throwable $exception, string $requestOrigin): ResponseInterface
+    {
+        if ($this->functionConfig->getDebug()) {
+            return new JsonErrorResponse($this->functionConfig, $exception->getMessage(), JsonErrorResponseInterface::DEFAULT_ERROR_STATUS_CODE, $requestOrigin);
         }
 
-        return $response;
+        return new JsonErrorResponse($this->functionConfig, self::ERROR_UNHANDLED, JsonErrorResponseInterface::DEFAULT_ERROR_STATUS_CODE, $requestOrigin);
+    }
+
+    private function handle(ServerRequestInterface $request, string $requestOrigin): ResponseInterface
+    {
+        if (!self::isAuthorized($request, $this->functionConfig)) {
+            return new JsonErrorResponse($this->functionConfig, self::ERROR_NOT_AUTHORIZED, 401, $requestOrigin);
+        }
+
+        $data = $this->dataProvider->getData($request);
+
+        return new JsonSuccessResponse($this->functionConfig, $data, 200, $requestOrigin);
     }
 
     private static function isAuthorized(ServerRequestInterface $request, FunctionConfigInterface $config): bool
     {
-        $authorized = true;
         $requiredHeaderKey = $config->getRequiredHeaderKey();
-        if ($requiredHeaderKey) {
-            $requiredHeaderValue = $config->getRequiredHeaderValue();
-            if (!$request->hasHeader($requiredHeaderKey) || $requiredHeaderValue !== $request->getHeaderLine($requiredHeaderKey)) {
-                $authorized = false;
-            }
+        if (!$requiredHeaderKey) {
+            return true;
+        }
+        if (!$request->hasHeader($requiredHeaderKey)) {
+            return false;
         }
 
-        return $authorized;
+        return $config->getRequiredHeaderValue() === $request->getHeaderLine($requiredHeaderKey);
     }
 }

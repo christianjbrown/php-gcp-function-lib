@@ -1,7 +1,5 @@
 <?php
 
-// phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
-
 declare(strict_types=1);
 
 namespace ChristianBrown\CloudFunction;
@@ -21,7 +19,10 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
     {
         // Required values
 
-        if (empty($env[self::ENV_K_REVISION]) || !is_string($env[self::ENV_K_REVISION])) {
+        if (empty($env[self::ENV_K_REVISION])) {
+            throw new RuntimeException(sprintf('%s not set or not a string', self::ENV_K_REVISION));
+        }
+        if (!is_string($env[self::ENV_K_REVISION])) {
             throw new RuntimeException(sprintf('%s not set or not a string', self::ENV_K_REVISION));
         }
         $kRevision = $env[self::ENV_K_REVISION];
@@ -30,28 +31,91 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
 
         // Optional values
 
-        if (!empty($env[self::ENV_DEBUG]) && 'true' === $env[self::ENV_DEBUG]) {
-            $config->setDebug(true);
-        }
-        if (!empty($env[self::ENV_REQUIRED_HEADER_KEY]) && is_string($env[self::ENV_REQUIRED_HEADER_KEY])) {
-            $config->setRequiredHeaderKey($env[self::ENV_REQUIRED_HEADER_KEY]);
-        }
-        if (!empty($env[self::ENV_REQUIRED_HEADER_VALUE]) && is_string($env[self::ENV_REQUIRED_HEADER_VALUE])) {
-            $config->setRequiredHeaderValue($env[self::ENV_REQUIRED_HEADER_VALUE]);
-        }
-        if (!empty($env[self::ENV_REQUIRED_ORIGIN]) && is_string($env[self::ENV_REQUIRED_ORIGIN])) {
-            $config->setRequiredOrigin($env[self::ENV_REQUIRED_ORIGIN]);
-        }
-        if (!empty($env[self::ENV_USE_CACHE_TTL]) && is_numeric($env[self::ENV_USE_CACHE_TTL])) {
-            $config->setUseCacheTtl((int) $env[self::ENV_USE_CACHE_TTL]);
-        }
-        if (!empty($env[self::ENV_USE_CACHE_BUT_REQUEST_TTL]) && is_numeric($env[self::ENV_USE_CACHE_BUT_REQUEST_TTL])) {
-            $config->setUseCacheButRequestTtl((int) $env[self::ENV_USE_CACHE_BUT_REQUEST_TTL]);
-        }
-        if (!empty($env[self::ENV_USE_CACHE_IF_ERROR_TTL]) && is_numeric($env[self::ENV_USE_CACHE_IF_ERROR_TTL])) {
-            $config->setUseCacheIfErrorTtl((int) $env[self::ENV_USE_CACHE_IF_ERROR_TTL]);
-        }
+        self::applyDebug($config, $env);
+        self::applyRequiredHeaderKey($config, $env);
+        self::applyRequiredHeaderValue($config, $env);
+        self::applyRequiredOrigin($config, $env);
+        self::applyUseCacheTtl($config, $env);
+        self::applyUseCacheButRequestTtl($config, $env);
+        self::applyUseCacheIfErrorTtl($config, $env);
 
         return $config;
+    }
+
+    private static function applyDebug(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_DEBUG])) {
+            return;
+        }
+        if ('true' !== $env[self::ENV_DEBUG]) {
+            return;
+        }
+        $config->setDebug(true);
+    }
+
+    private static function applyRequiredHeaderKey(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_REQUIRED_HEADER_KEY])) {
+            return;
+        }
+        if (!is_string($env[self::ENV_REQUIRED_HEADER_KEY])) {
+            return;
+        }
+        $config->setRequiredHeaderKey($env[self::ENV_REQUIRED_HEADER_KEY]);
+    }
+
+    private static function applyRequiredHeaderValue(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_REQUIRED_HEADER_VALUE])) {
+            return;
+        }
+        if (!is_string($env[self::ENV_REQUIRED_HEADER_VALUE])) {
+            return;
+        }
+        $config->setRequiredHeaderValue($env[self::ENV_REQUIRED_HEADER_VALUE]);
+    }
+
+    private static function applyRequiredOrigin(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_REQUIRED_ORIGIN])) {
+            return;
+        }
+        if (!is_string($env[self::ENV_REQUIRED_ORIGIN])) {
+            return;
+        }
+        $config->setRequiredOrigin($env[self::ENV_REQUIRED_ORIGIN]);
+    }
+
+    private static function applyUseCacheButRequestTtl(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_USE_CACHE_BUT_REQUEST_TTL])) {
+            return;
+        }
+        if (!is_numeric($env[self::ENV_USE_CACHE_BUT_REQUEST_TTL])) {
+            return;
+        }
+        $config->setUseCacheButRequestTtl((int) $env[self::ENV_USE_CACHE_BUT_REQUEST_TTL]);
+    }
+
+    private static function applyUseCacheIfErrorTtl(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_USE_CACHE_IF_ERROR_TTL])) {
+            return;
+        }
+        if (!is_numeric($env[self::ENV_USE_CACHE_IF_ERROR_TTL])) {
+            return;
+        }
+        $config->setUseCacheIfErrorTtl((int) $env[self::ENV_USE_CACHE_IF_ERROR_TTL]);
+    }
+
+    private static function applyUseCacheTtl(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_USE_CACHE_TTL])) {
+            return;
+        }
+        if (!is_numeric($env[self::ENV_USE_CACHE_TTL])) {
+            return;
+        }
+        $config->setUseCacheTtl((int) $env[self::ENV_USE_CACHE_TTL]);
     }
 }
