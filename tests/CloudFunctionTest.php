@@ -38,8 +38,10 @@ final class CloudFunctionTest extends TestCase
             ->with('test-header-key')
             ->willReturn(true);
         $request->method('getHeaderLine')
-            ->with('test-header-key')
-            ->willReturn('test-header-value-wrong');
+            ->willReturnMap([
+                ['test-header-key', 'test-header-value-wrong'],
+                [ResponseInterface::HEADER_KEY_ORIGIN, ''],
+            ]);
 
         $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->method('getData')
@@ -78,8 +80,10 @@ final class CloudFunctionTest extends TestCase
             ->with('test-header-key')
             ->willReturn(true);
         $request->method('getHeaderLine')
-            ->with('test-header-key')
-            ->willReturn('test-header-value');
+            ->willReturnMap([
+                ['test-header-key', 'test-header-value'],
+                [ResponseInterface::HEADER_KEY_ORIGIN, ''],
+            ]);
 
         // Cannot mock getMessage in Exception because it is final, need to use a real class
         $userFriendlyException = new UserFriendlyException('test-friendly-error-message');
@@ -123,8 +127,10 @@ final class CloudFunctionTest extends TestCase
             ->with('test-header-key')
             ->willReturn(true);
         $request->method('getHeaderLine')
-            ->with('test-header-key')
-            ->willReturn('test-header-value');
+            ->willReturnMap([
+                ['test-header-key', 'test-header-value'],
+                [ResponseInterface::HEADER_KEY_ORIGIN, ''],
+            ]);
 
         // Cannot mock getMessage in Exception because it is final, need to use a real class
         $exception = new RuntimeException('test-exception-message');
@@ -172,8 +178,10 @@ final class CloudFunctionTest extends TestCase
             ->with('test-header-key')
             ->willReturn(true);
         $request->method('getHeaderLine')
-            ->with('test-header-key')
-            ->willReturn('test-header-value');
+            ->willReturnMap([
+                ['test-header-key', 'test-header-value'],
+                [ResponseInterface::HEADER_KEY_ORIGIN, ''],
+            ]);
 
         $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->method('getData')
@@ -200,6 +208,48 @@ final class CloudFunctionTest extends TestCase
         $actual = $cloudFunction->run($request);
 
         self::assertResponseSuccess($actual, ['test-data'], 200, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSuccessLocalhostOriginEchoed(): void
+    {
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->method('hasHeader')
+            ->with('test-header-key')
+            ->willReturn(true);
+        $request->method('getHeaderLine')
+            ->willReturnMap([
+                ['test-header-key', 'test-header-value'],
+                [ResponseInterface::HEADER_KEY_ORIGIN, 'http://localhost:5173'],
+            ]);
+
+        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider->method('getData')
+            ->willReturn(['test-data']);
+
+        $functionConfig = $this->createMock(FunctionConfigInterface::class);
+        $functionConfig->method('getRequiredHeaderKey')
+            ->willReturn('test-header-key');
+        $functionConfig->method('getRequiredHeaderValue')
+            ->willReturn('test-header-value');
+        $functionConfig->method('getRequiredOrigin')
+            ->willReturn('test-origin');
+        $functionConfig->method('getKrevision')
+            ->willReturn('test-krevision');
+        $functionConfig->method('getUseCacheTtl')
+            ->willReturn(3600);
+        $functionConfig->method('getUseCacheButRequestTtl')
+            ->willReturn(7200);
+        $functionConfig->method('getUseCacheIfErrorTtl')
+            ->willReturn(259200);
+
+        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+
+        $actual = $cloudFunction->run($request);
+
+        self::assertResponseSuccess($actual, ['test-data'], 200, 'http://localhost:5173', 'Accept-Encoding,Origin,test-header-key');
     }
 
     /**

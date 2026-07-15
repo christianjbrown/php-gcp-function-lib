@@ -14,6 +14,7 @@ interface ResponseInterface extends PsrResponseInterface
     public const string HEADER_KEY_ALLOW_ORIGIN = 'Access-Control-Allow-Origin';
     public const string HEADER_KEY_CACHE_CONTROL = 'Cache-Control';
     public const string HEADER_KEY_CONTENT_TYPE = 'Content-Type';
+    public const string HEADER_KEY_ORIGIN = 'Origin';
     public const string HEADER_KEY_SURROGATE_CONTROL = 'Surrogate-Control';
     public const string HEADER_KEY_VARY = 'Vary';
     public const string HEADER_VARY_ACCEPT_ENCODING = 'Accept-Encoding';
@@ -23,6 +24,7 @@ interface ResponseInterface extends PsrResponseInterface
         self::HEADER_KEY_ALLOW_METHODS => 'GET, OPTIONS',
         self::HEADER_KEY_CONTENT_TYPE => self::HEADER_CONTENT_TYPE_VALUE_JSON,
     ];
+    public const array HOSTS_LOCAL = ['localhost', '127.0.0.1'];
     public const string RESPONSE_API_KEY_DATA = 'data';
     public const string RESPONSE_API_KEY_ERROR = 'error';
     public const string RESPONSE_API_KEY_SUCCESS = 'success';

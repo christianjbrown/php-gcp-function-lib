@@ -21,22 +21,24 @@ final class CloudFunction implements CloudFunctionInterface
 
     public function run(ServerRequestInterface $request): ResponseInterface
     {
+        $requestOrigin = $request->getHeaderLine(ResponseInterface::HEADER_KEY_ORIGIN);
+
         try {
             $isAuthorized = self::isAuthorized($request, $this->functionConfig);
             if (!$isAuthorized) {
-                return new JsonErrorResponse($this->functionConfig, self::ERROR_NOT_AUTHORIZED, 401);
+                return new JsonErrorResponse($this->functionConfig, self::ERROR_NOT_AUTHORIZED, 401, $requestOrigin);
             }
 
             $data = $this->dataProvider->getData($request);
 
-            $response = new JsonSuccessResponse($this->functionConfig, $data);
+            $response = new JsonSuccessResponse($this->functionConfig, $data, 200, $requestOrigin);
         } catch (UserFriendlyExceptionInterface $exception) {
-            $response = new JsonErrorResponse($this->functionConfig, $exception->getMessage());
+            $response = new JsonErrorResponse($this->functionConfig, $exception->getMessage(), JsonErrorResponseInterface::DEFAULT_ERROR_STATUS_CODE, $requestOrigin);
         } catch (Throwable $exception) {
             if ($this->functionConfig->getDebug()) {
-                $response = new JsonErrorResponse($this->functionConfig, $exception->getMessage());
+                $response = new JsonErrorResponse($this->functionConfig, $exception->getMessage(), JsonErrorResponseInterface::DEFAULT_ERROR_STATUS_CODE, $requestOrigin);
             } else {
-                $response = new JsonErrorResponse($this->functionConfig, self::ERROR_UNHANDLED);
+                $response = new JsonErrorResponse($this->functionConfig, self::ERROR_UNHANDLED, JsonErrorResponseInterface::DEFAULT_ERROR_STATUS_CODE, $requestOrigin);
             }
         }
 
