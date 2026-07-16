@@ -1,6 +1,6 @@
 {
     "name": "christianjbrown/php-gcp-function-lib",
-    "description": "A strongly-typed PHP 8.3+ framework for building Google Cloud Run / Cloud Functions HTTP endpoints that return a consistent JSON envelope with built-in header auth, CORS, and CDN cache-control headers.",
+    "description": "A strongly-typed PHP 8.5+ framework for building Google Cloud Run / Cloud Functions HTTP endpoints that return a consistent JSON envelope with built-in header auth, CORS, and CDN cache-control headers.",
     "type": "library",
     "license": "MIT",
     "keywords": ["google-cloud", "cloud-run", "cloud-functions", "serverless", "psr-7", "json-api"],
@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8.5",
         "christianjbrown/php-user-friendly-exception-lib": "dev-main",
         "guzzlehttp/guzzle": "^7.9"
     },
