@@ -48,7 +48,7 @@ final class ResponseBodyBuilder implements ResponseBodyBuilderInterface
             $body = json_encode($bodyJson, JSON_THROW_ON_ERROR + JSON_PRETTY_PRINT);
         } catch (JsonException $exception) {
             $success = false;
-            $statusCode = 500;
+            $statusCode = ResponseInterface::STATUS_INTERNAL_SERVER_ERROR;
             $bodyJson[ResponseInterface::RESPONSE_API_KEY_SUCCESS] = false;
             unset($bodyJson[ResponseInterface::RESPONSE_API_KEY_DATA]);
             $bodyJson[ResponseInterface::RESPONSE_API_KEY_ERROR] = ResponseInterface::ERROR_JSON_ENCODING;

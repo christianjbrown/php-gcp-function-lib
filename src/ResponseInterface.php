@@ -30,4 +30,7 @@ interface ResponseInterface extends PsrResponseInterface
     public const string RESPONSE_API_KEY_TIMESTAMP_ISO8601 = 'timestamp_iso8601';
     public const string RESPONSE_API_KEY_TIMESTAMP_UNIX = 'timestamp_unix';
     public const string RESPONSE_API_KEY_VERSION = 'version';
+    public const int STATUS_INTERNAL_SERVER_ERROR = 500;
+    public const int STATUS_OK = 200;
+    public const int STATUS_UNAUTHORIZED = 401;
 }

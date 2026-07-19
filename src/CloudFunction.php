@@ -46,12 +46,12 @@ final class CloudFunction implements CloudFunctionInterface
     private function handle(ServerRequestInterface $request, string $requestOrigin): ResponseInterface
     {
         if (!self::isAuthorized($request, $this->functionConfig)) {
-            return new JsonErrorResponse($this->functionConfig, self::ERROR_NOT_AUTHORIZED, 401, $requestOrigin);
+            return new JsonErrorResponse($this->functionConfig, self::ERROR_NOT_AUTHORIZED, ResponseInterface::STATUS_UNAUTHORIZED, $requestOrigin);
         }
 
         $data = $this->dataProvider->getData($request);
 
-        return new JsonSuccessResponse($this->functionConfig, $data, 200, $requestOrigin);
+        return new JsonSuccessResponse($this->functionConfig, $data, ResponseInterface::STATUS_OK, $requestOrigin);
     }
 
     private static function isAuthorized(ServerRequestInterface $request, FunctionConfigInterface $config): bool
