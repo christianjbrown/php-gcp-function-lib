@@ -10,7 +10,7 @@ use function time;
 
 abstract class AbstractJsonResponse extends Response implements ResponseInterface
 {
-    public function __construct(?FunctionConfigInterface $functionConfig, array $data = [], bool $success = true, ?string $error = null, int $statusCode = 200, ?string $requestOrigin = null)
+    public function __construct(?FunctionConfigInterface $functionConfig, array $data = [], bool $success = true, ?string $error = null, int $statusCode = self::STATUS_OK, ?string $requestOrigin = null)
     {
         $time = time();
 
