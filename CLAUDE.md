@@ -54,12 +54,23 @@ Everything lives directly under `src/` (no sub-layers). PSR-4: `ChristianBrown\G
 - **`FunctionConfigTransformer`** / **`FunctionConfigTransformerInterface`** — builds a
   `FunctionConfig` from an environment-variable array (`K_REVISION` required; the rest optional),
   with `ENV_*` key constants on the interface.
-- **`AbstractJsonResponse`** + **`JsonSuccessResponse`** / **`JsonErrorResponse`** — build the
-  standardized JSON body and set the CORS / `Vary` / `Cache-Control` / `Surrogate-Control` headers.
-  If JSON encoding throws, they fall back to a 500 with `ERROR_JSON_ENCODING`.
+- **`AbstractJsonResponse`** + **`JsonSuccessResponse`** / **`JsonErrorResponse`** — produce the
+  standardized JSON envelope. `AbstractJsonResponse` is now a **thin orchestrator**: its constructor
+  composes four single-responsibility collaborators (below), then hands the body + headers to Guzzle's
+  PSR-7 `Response`. The two concrete responses are the same frozen public constructors as before.
   **Note:** `AbstractJsonResponse` is the one deliberate exception to the "no abstract base classes"
-  convention below — it exists to share the response-building logic across the two concrete
-  responses while extending Guzzle's PSR-7 `Response`.
+  convention below — it extends Guzzle's PSR-7 `Response` and wires the collaborators.
+- **`ResponseBodyBuilder` / `ResponseBodyBuilderInterface`** — `build()` assembles the body array
+  (success flag, timestamps, optional data/version/error, `ksort`ed); `encode()` serializes it and, if
+  JSON encoding throws, falls back to a 500 body with `ERROR_JSON_ENCODING`.
+- **`CorsHeaderBuilder` / `CorsHeaderBuilderInterface`** — sets `Access-Control-Allow-Origin` (via the
+  injected `AllowOriginResolverInterface`) and the `Vary` list, only when a required origin is configured.
+- **`AllowOriginResolver` / `AllowOriginResolverInterface`** — the **security-sensitive** origin
+  decision, isolated for direct testing: it pins the configured origin in production and only reflects a
+  genuine loopback origin (`localhost`/`127.0.0.1` host, parsed — not substring-matched) when `DEBUG` is on.
+- **`CacheHeaderBuilder` / `CacheHeaderBuilderInterface`** — builds `Cache-Control` / `Surrogate-Control`
+  from the three cache TTLs on a successful response; the directive templates (`max-age=%d`, `s-maxage=%d`,
+  `stale-while-revalidate=%d`, `stale-if-error=%d`) are constants on its interface.
 - **`ResponseInterface`** — extends the PSR-7 response interface and centralizes every header name,
   content type, the default `HEADERS` array, and the response-body key names as typed constants.
 

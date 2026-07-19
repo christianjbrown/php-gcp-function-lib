@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace ChristianBrown\GcpFunction\Tests;
 
 use ChristianBrown\GcpFunction\AbstractJsonResponse;
+use ChristianBrown\GcpFunction\AllowOriginResolver;
+use ChristianBrown\GcpFunction\CacheHeaderBuilder;
 use ChristianBrown\GcpFunction\CloudFunction;
 use ChristianBrown\GcpFunction\CloudFunctionInterface;
+use ChristianBrown\GcpFunction\CorsHeaderBuilder;
 use ChristianBrown\GcpFunction\DataProviderInterface;
 use ChristianBrown\GcpFunction\FunctionConfigInterface;
 use ChristianBrown\GcpFunction\JsonErrorResponse;
 use ChristianBrown\GcpFunction\JsonErrorResponseInterface;
 use ChristianBrown\GcpFunction\JsonSuccessResponse;
 use ChristianBrown\GcpFunction\JsonSuccessResponseInterface;
+use ChristianBrown\GcpFunction\ResponseBodyBuilder;
 use ChristianBrown\GcpFunction\ResponseInterface;
 use ChristianBrown\UserFriendlyException\UserFriendlyException;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -25,6 +29,10 @@ use RuntimeException;
 #[CoversClass(JsonSuccessResponse::class)]
 #[CoversClass(JsonErrorResponse::class)]
 #[CoversClass(AbstractJsonResponse::class)]
+#[CoversClass(AllowOriginResolver::class)]
+#[CoversClass(CacheHeaderBuilder::class)]
+#[CoversClass(CorsHeaderBuilder::class)]
+#[CoversClass(ResponseBodyBuilder::class)]
 #[CoversClass(CloudFunction::class)]
 final class CloudFunctionTest extends TestCase
 {
