@@ -5,14 +5,22 @@ declare(strict_types=1);
 namespace ChristianBrown\GcpFunction\Tests;
 
 use ChristianBrown\GcpFunction\AbstractJsonResponse;
+use ChristianBrown\GcpFunction\AllowOriginResolver;
+use ChristianBrown\GcpFunction\CacheHeaderBuilder;
+use ChristianBrown\GcpFunction\CorsHeaderBuilder;
 use ChristianBrown\GcpFunction\FunctionConfigInterface;
 use ChristianBrown\GcpFunction\JsonSuccessResponse;
+use ChristianBrown\GcpFunction\ResponseBodyBuilder;
 use ChristianBrown\GcpFunction\ResponseInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractJsonResponse::class)]
+#[CoversClass(AllowOriginResolver::class)]
+#[CoversClass(CacheHeaderBuilder::class)]
+#[CoversClass(CorsHeaderBuilder::class)]
+#[CoversClass(ResponseBodyBuilder::class)]
 #[CoversClass(JsonSuccessResponse::class)]
 final class JsonSuccessResponseTest extends TestCase
 {
