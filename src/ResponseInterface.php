@@ -4,8 +4,49 @@ declare(strict_types=1);
 
 namespace ChristianBrown\GcpFunction;
 
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 
+#[OA\Schema(
+    schema: 'ErrorEnvelope',
+    description: 'The complete JSON error envelope returned by every consuming function for a failed request (an authorization failure or an unhandled error). Identical for every function.',
+    required: [
+        self::RESPONSE_API_KEY_SUCCESS,
+        self::RESPONSE_API_KEY_TIMESTAMP_UNIX,
+        self::RESPONSE_API_KEY_TIMESTAMP_ISO8601,
+        self::RESPONSE_API_KEY_VERSION,
+        self::RESPONSE_API_KEY_ERROR,
+    ],
+    properties: [
+        new OA\Property(property: self::RESPONSE_API_KEY_SUCCESS, description: 'Always false for an error response.', type: 'boolean'),
+        new OA\Property(property: self::RESPONSE_API_KEY_TIMESTAMP_UNIX, description: 'When the response was generated (Unix seconds).', type: 'integer'),
+        new OA\Property(property: self::RESPONSE_API_KEY_TIMESTAMP_ISO8601, description: 'When the response was generated (ISO 8601).', type: 'string', format: 'date-time'),
+        new OA\Property(property: self::RESPONSE_API_KEY_VERSION, description: 'The Cloud Run revision that produced the response.', type: 'string'),
+        new OA\Property(property: self::RESPONSE_API_KEY_ERROR, description: 'A human-readable description of what went wrong.', type: 'string'),
+    ],
+    type: 'object',
+    additionalProperties: false,
+)]
+#[OA\Schema(
+    schema: 'SuccessEnvelope',
+    description: 'The shared base of the JSON success envelope returned by every consuming function. The `data` property is a generic object placeholder; each function tightens it to its own data schema by composing this base with `allOf`, e.g. `allOf: [{$ref: "#/components/schemas/SuccessEnvelope"}, {properties: {data: {$ref: "#/components/schemas/YourData"}}}]`.',
+    required: [
+        self::RESPONSE_API_KEY_SUCCESS,
+        self::RESPONSE_API_KEY_TIMESTAMP_UNIX,
+        self::RESPONSE_API_KEY_TIMESTAMP_ISO8601,
+        self::RESPONSE_API_KEY_VERSION,
+        self::RESPONSE_API_KEY_DATA,
+    ],
+    properties: [
+        new OA\Property(property: self::RESPONSE_API_KEY_SUCCESS, description: 'Always true for a success response.', type: 'boolean'),
+        new OA\Property(property: self::RESPONSE_API_KEY_TIMESTAMP_UNIX, description: 'When the response was generated (Unix seconds).', type: 'integer'),
+        new OA\Property(property: self::RESPONSE_API_KEY_TIMESTAMP_ISO8601, description: 'When the response was generated (ISO 8601).', type: 'string', format: 'date-time'),
+        new OA\Property(property: self::RESPONSE_API_KEY_VERSION, description: 'The Cloud Run revision that produced the response.', type: 'string'),
+        new OA\Property(property: self::RESPONSE_API_KEY_DATA, description: 'The function-specific payload. Each function overrides this via `allOf` with its own data schema.', type: 'object'),
+    ],
+    type: 'object',
+    additionalProperties: false,
+)]
 interface ResponseInterface extends PsrResponseInterface
 {
     public const string ERROR_JSON_ENCODING = 'Problem encoding JSON in response';
