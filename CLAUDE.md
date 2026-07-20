@@ -5,7 +5,7 @@ small, uniform, and highly opinionated, so new code should be indistinguishable 
 
 ## What this is
 
-A strongly-typed PHP 8.5+ framework for building **Google Cloud Run / Cloud Functions** HTTP
+A strongly-typed PHP 8.5+ framework for building **Google Cloud Run function** HTTP
 endpoints that return a consistent JSON envelope, with built-in header authorization, CORS, and CDN
 cache-control headers. It is built around [PSR-7](https://www.php-fig.org/psr/psr-7/): a consumer
 implements `DataProviderInterface` (their business logic), builds a `FunctionConfig` from Cloud Run
