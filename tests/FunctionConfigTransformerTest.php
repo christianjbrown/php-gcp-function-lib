@@ -21,6 +21,7 @@ final class FunctionConfigTransformerTest extends TestCase
     public function test(bool $debug): void
     {
         $env = [
+            FunctionConfigTransformerInterface::ENV_ALLOW_LOCAL_ORIGINS => 'true',
             FunctionConfigTransformerInterface::ENV_ALLOW_UNAUTHENTICATED => 'true',
             FunctionConfigTransformerInterface::ENV_DEBUG => $debug ? 'true' : 'false',
             FunctionConfigTransformerInterface::ENV_K_REVISION => 'test-krevision',
@@ -34,6 +35,7 @@ final class FunctionConfigTransformerTest extends TestCase
         $transformer = new FunctionConfigTransformer();
         $actual = $transformer->transform($env);
         self::assertSame('test-krevision', $actual->getKrevision());
+        self::assertTrue($actual->getAllowLocalOrigins());
         self::assertTrue($actual->getAllowUnauthenticated());
         self::assertSame($debug, $actual->getDebug());
         self::assertSame('test-required-header-key', $actual->getRequiredHeaderKey());
@@ -66,6 +68,7 @@ final class FunctionConfigTransformerTest extends TestCase
         $transformer = new FunctionConfigTransformer();
         $actual = $transformer->transform($env);
         self::assertSame('test-krevision', $actual->getKrevision());
+        self::assertFalse($actual->getAllowLocalOrigins());
         self::assertFalse($actual->getAllowUnauthenticated());
         self::assertFalse($actual->getDebug());
         self::assertNull($actual->getRequiredHeaderKey());
@@ -80,6 +83,7 @@ final class FunctionConfigTransformerTest extends TestCase
     {
         $env = [
             FunctionConfigTransformerInterface::ENV_K_REVISION => 'test-krevision',
+            FunctionConfigTransformerInterface::ENV_ALLOW_LOCAL_ORIGINS => 'false',
             FunctionConfigTransformerInterface::ENV_ALLOW_UNAUTHENTICATED => 'false',
             FunctionConfigTransformerInterface::ENV_DEBUG => 'false',
             FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_KEY => 123,
@@ -92,6 +96,7 @@ final class FunctionConfigTransformerTest extends TestCase
         $transformer = new FunctionConfigTransformer();
         $actual = $transformer->transform($env);
         self::assertSame('test-krevision', $actual->getKrevision());
+        self::assertFalse($actual->getAllowLocalOrigins());
         self::assertFalse($actual->getAllowUnauthenticated());
         self::assertFalse($actual->getDebug());
         self::assertNull($actual->getRequiredHeaderKey());

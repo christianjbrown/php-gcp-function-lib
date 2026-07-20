@@ -64,7 +64,7 @@ interface ResponseInterface extends PsrResponseInterface
         self::HEADER_KEY_ALLOW_METHODS => 'GET, OPTIONS',
         self::HEADER_KEY_CONTENT_TYPE => self::HEADER_CONTENT_TYPE_VALUE_JSON,
     ];
-    public const array HOSTS_LOCAL = ['localhost', '127.0.0.1'];
+    public const array HOSTS_LOCAL = ['localhost', '127.0.0.1', '0.0.0.0', '::1'];
     public const string RESPONSE_API_KEY_DATA = 'data';
     public const string RESPONSE_API_KEY_ERROR = 'error';
     public const string RESPONSE_API_KEY_SUCCESS = 'success';

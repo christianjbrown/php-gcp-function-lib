@@ -31,7 +31,7 @@ final class CorsHeaderBuilder implements CorsHeaderBuilderInterface
             return $headers;
         }
 
-        $headers[ResponseInterface::HEADER_KEY_ALLOW_ORIGIN] = $this->allowOriginResolver->resolve($requiredOrigin, $requestOrigin, $functionConfig->getDebug());
+        $headers[ResponseInterface::HEADER_KEY_ALLOW_ORIGIN] = $this->allowOriginResolver->resolve($requiredOrigin, $requestOrigin, $functionConfig->getDebug(), $functionConfig->getAllowLocalOrigins());
 
         $varyList = [ResponseInterface::HEADER_VARY_ACCEPT_ENCODING, ResponseInterface::HEADER_VARY_ORIGIN];
         $requiredHeaderKey = $functionConfig->getRequiredHeaderKey();

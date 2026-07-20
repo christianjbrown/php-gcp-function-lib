@@ -6,6 +6,8 @@ namespace ChristianBrown\GcpFunction;
 
 interface FunctionConfigInterface
 {
+    public function getAllowLocalOrigins(): bool;
+
     public function getAllowUnauthenticated(): bool;
 
     public function getDebug(): bool;
@@ -23,6 +25,8 @@ interface FunctionConfigInterface
     public function getUseCacheIfErrorTtl(): ?int;
 
     public function getUseCacheTtl(): ?int;
+
+    public function setAllowLocalOrigins(bool $value): self;
 
     public function setAllowUnauthenticated(bool $value): self;
 
