@@ -27,8 +27,9 @@ gitignored and Composer-installed, so run `composer install` first.
 | Check / fix style on git diff only | `composer check-style-diff` / `composer fix-style-diff` |
 | Static analysis | `composer stan` |
 
-Style tooling comes from the `christianjbrown/php-code-quality-scripts` dev dependency (php-cs-fixer
-+ PHP_CodeSniffer, **Symfony2 coding standard**); the `bin/php-cs*` scripts are thin wrappers over it.
+Style tooling comes from the `christianjbrown/php-code-quality-scripts` dev dependency: linting via
+**PHP_CodeSniffer 4** with the **`ChristianBrown` standard** (slevomat sniffs plus PSR/PEAR/Squiz/Generic),
+and formatting via **php-cs-fixer** (`@PhpCsFixer`/`@Symfony` rule sets); the `bin/php-cs*` scripts are thin wrappers over it.
 Static analysis is **PHPStan at `level: max`** (`phpstan.neon.dist`, run with `composer stan` /
 `./bin/phpstan analyse`), and there is a **GitHub Actions CI workflow** (`.github/workflows/ci.yml`)
 that runs style, PHPStan, and the PHPUnit suite with coverage on every push/PR to `main`. Because the
