@@ -43,6 +43,9 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         return $config;
     }
 
+    /**
+     * @phpstan-param mixed[] $env
+     */
     private static function applyAllowUnauthenticated(FunctionConfigInterface $config, array $env): void
     {
         if (empty($env[self::ENV_ALLOW_UNAUTHENTICATED])) {
@@ -54,6 +57,9 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         $config->setAllowUnauthenticated(true);
     }
 
+    /**
+     * @phpstan-param mixed[] $env
+     */
     private static function applyDebug(FunctionConfigInterface $config, array $env): void
     {
         if (empty($env[self::ENV_DEBUG])) {
@@ -65,6 +71,9 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         $config->setDebug(true);
     }
 
+    /**
+     * @phpstan-param mixed[] $env
+     */
     private static function applyRequiredHeaderKey(FunctionConfigInterface $config, array $env): void
     {
         if (empty($env[self::ENV_REQUIRED_HEADER_KEY])) {
@@ -76,6 +85,9 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         $config->setRequiredHeaderKey($env[self::ENV_REQUIRED_HEADER_KEY]);
     }
 
+    /**
+     * @phpstan-param mixed[] $env
+     */
     private static function applyRequiredHeaderValue(FunctionConfigInterface $config, array $env): void
     {
         if (empty($env[self::ENV_REQUIRED_HEADER_VALUE])) {
@@ -87,6 +99,9 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         $config->setRequiredHeaderValue($env[self::ENV_REQUIRED_HEADER_VALUE]);
     }
 
+    /**
+     * @phpstan-param mixed[] $env
+     */
     private static function applyRequiredOrigin(FunctionConfigInterface $config, array $env): void
     {
         if (empty($env[self::ENV_REQUIRED_ORIGIN])) {
@@ -98,6 +113,9 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         $config->setRequiredOrigin($env[self::ENV_REQUIRED_ORIGIN]);
     }
 
+    /**
+     * @phpstan-param mixed[] $env
+     */
     private static function applyUseCacheButRequestTtl(FunctionConfigInterface $config, array $env): void
     {
         if (empty($env[self::ENV_USE_CACHE_BUT_REQUEST_TTL])) {
@@ -109,6 +127,9 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         $config->setUseCacheButRequestTtl((int) $env[self::ENV_USE_CACHE_BUT_REQUEST_TTL]);
     }
 
+    /**
+     * @phpstan-param mixed[] $env
+     */
     private static function applyUseCacheIfErrorTtl(FunctionConfigInterface $config, array $env): void
     {
         if (empty($env[self::ENV_USE_CACHE_IF_ERROR_TTL])) {
@@ -120,6 +141,9 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         $config->setUseCacheIfErrorTtl((int) $env[self::ENV_USE_CACHE_IF_ERROR_TTL]);
     }
 
+    /**
+     * @phpstan-param mixed[] $env
+     */
     private static function applyUseCacheTtl(FunctionConfigInterface $config, array $env): void
     {
         if (empty($env[self::ENV_USE_CACHE_TTL])) {

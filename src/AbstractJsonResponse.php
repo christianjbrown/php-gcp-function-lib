@@ -10,6 +10,9 @@ use function time;
 
 abstract class AbstractJsonResponse extends Response implements ResponseInterface
 {
+    /**
+     * @phpstan-param mixed[] $data
+     */
     public function __construct(?FunctionConfigInterface $functionConfig, array $data = [], bool $success = true, ?string $error = null, int $statusCode = self::STATUS_OK, ?string $requestOrigin = null)
     {
         $time = time();

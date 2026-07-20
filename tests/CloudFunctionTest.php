@@ -415,6 +415,9 @@ final class CloudFunctionTest extends TestCase
         self::assertSame($expectedVersion, $json['version']);
     }
 
+    /**
+     * @phpstan-param mixed[] $expectedData
+     */
     private static function assertResponseSuccess(ResponseInterface $response, array $expectedData, int $statusCode, ?string $expectedOrigin, ?string $expectedVary, ?string $expectedVersion = 'test-krevision'): void
     {
         self::assertInstanceOf(JsonSuccessResponseInterface::class, $response);
