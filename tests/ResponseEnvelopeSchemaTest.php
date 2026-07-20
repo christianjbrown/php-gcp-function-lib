@@ -80,6 +80,11 @@ final class ResponseEnvelopeSchemaTest extends TestCase
         // A success-shaped envelope (with `data`, no `error`) must not pass the error schema.
         $successEnvelope = $this->buildEnvelope([self::KEY_DEVICES => ['a']], true, null);
         $this->assertViolates($successEnvelope, self::SCHEMA_ERROR_ENVELOPE);
+
+        // The pinned `enum: [false]` is what rejects a wrong-flag envelope: an otherwise error-shaped
+        // payload (correct required fields, no extra properties) with `success=true` must now fail.
+        $wrongFlagError = $this->buildEnvelope([], true, 'An unhandled error occurred');
+        $this->assertViolates($wrongFlagError, self::SCHEMA_ERROR_ENVELOPE);
     }
 
     /**
@@ -138,6 +143,11 @@ final class ResponseEnvelopeSchemaTest extends TestCase
         $successEnvelope = $this->buildEnvelope([self::KEY_DEVICES => ['a', 'b']], true, null);
 
         $this->assertConforms($successEnvelope, self::SCHEMA_SUCCESS_ENVELOPE);
+
+        // The pinned `enum: [true]` is what rejects a wrong-flag envelope: an otherwise success-shaped
+        // payload (correct required fields, no extra properties) with `success=false` must now fail.
+        $wrongFlagSuccess = $this->buildEnvelope([self::KEY_DEVICES => ['a', 'b']], false, null);
+        $this->assertViolates($wrongFlagSuccess, self::SCHEMA_SUCCESS_ENVELOPE);
     }
 
     private function assertConforms(stdClass $value, string $schemaName): void

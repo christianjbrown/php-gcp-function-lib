@@ -18,7 +18,7 @@ use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
         self::RESPONSE_API_KEY_ERROR,
     ],
     properties: [
-        new OA\Property(property: self::RESPONSE_API_KEY_SUCCESS, description: 'Always false for an error response.', type: 'boolean'),
+        new OA\Property(property: self::RESPONSE_API_KEY_SUCCESS, description: 'Always false for an error response.', type: 'boolean', enum: [false]),
         new OA\Property(property: self::RESPONSE_API_KEY_TIMESTAMP_UNIX, description: 'When the response was generated (Unix seconds).', type: 'integer'),
         new OA\Property(property: self::RESPONSE_API_KEY_TIMESTAMP_ISO8601, description: 'When the response was generated (ISO 8601).', type: 'string', format: 'date-time'),
         new OA\Property(property: self::RESPONSE_API_KEY_VERSION, description: 'The Cloud Run revision that produced the response.', type: 'string'),
@@ -38,7 +38,7 @@ use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
         self::RESPONSE_API_KEY_DATA,
     ],
     properties: [
-        new OA\Property(property: self::RESPONSE_API_KEY_SUCCESS, description: 'Always true for a success response.', type: 'boolean'),
+        new OA\Property(property: self::RESPONSE_API_KEY_SUCCESS, description: 'Always true for a success response.', type: 'boolean', enum: [true]),
         new OA\Property(property: self::RESPONSE_API_KEY_TIMESTAMP_UNIX, description: 'When the response was generated (Unix seconds).', type: 'integer'),
         new OA\Property(property: self::RESPONSE_API_KEY_TIMESTAMP_ISO8601, description: 'When the response was generated (ISO 8601).', type: 'string', format: 'date-time'),
         new OA\Property(property: self::RESPONSE_API_KEY_VERSION, description: 'The Cloud Run revision that produced the response.', type: 'string'),
