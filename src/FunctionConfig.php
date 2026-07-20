@@ -6,6 +6,7 @@ namespace ChristianBrown\GcpFunction;
 
 final class FunctionConfig implements FunctionConfigInterface
 {
+    private bool $allowLocalOrigins = false;
     private bool $allowUnauthenticated = false;
     private bool $debug = false;
     private string $kRevision;
@@ -19,6 +20,11 @@ final class FunctionConfig implements FunctionConfigInterface
     public function __construct(string $kRevision)
     {
         $this->kRevision = $kRevision;
+    }
+
+    public function getAllowLocalOrigins(): bool
+    {
+        return $this->allowLocalOrigins;
     }
 
     public function getAllowUnauthenticated(): bool
@@ -64,6 +70,13 @@ final class FunctionConfig implements FunctionConfigInterface
     public function getUseCacheTtl(): ?int
     {
         return $this->useCacheTtl;
+    }
+
+    public function setAllowLocalOrigins(bool $value): self
+    {
+        $this->allowLocalOrigins = $value;
+
+        return $this;
     }
 
     public function setAllowUnauthenticated(bool $value): self

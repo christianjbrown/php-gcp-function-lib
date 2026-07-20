@@ -6,21 +6,25 @@ namespace ChristianBrown\GcpFunction;
 
 use function in_array;
 use function is_string;
+use function mb_trim;
 use function parse_url;
 
 use const PHP_URL_HOST;
 
 final class AllowOriginResolver implements AllowOriginResolverInterface
 {
-    public function resolve(string $requiredOrigin, ?string $requestOrigin, bool $debug): string
+    public function resolve(string $requiredOrigin, ?string $requestOrigin, bool $debug, bool $allowLocalOrigins): string
     {
         if (null === $requestOrigin) {
             return $requiredOrigin;
         }
-        // Reflecting a localhost origin is a development convenience only; never
-        // do it outside debug so production always pins the configured origin.
+        // Reflecting a loopback origin is a development convenience; only do it
+        // when explicitly allowed (or in debug) so production otherwise always
+        // pins the configured origin.
         if (!$debug) {
-            return $requiredOrigin;
+            if (!$allowLocalOrigins) {
+                return $requiredOrigin;
+            }
         }
         if (!$this->isLocalOrigin($requestOrigin)) {
             return $requiredOrigin;
@@ -40,6 +44,8 @@ final class AllowOriginResolver implements AllowOriginResolverInterface
             return false;
         }
 
-        return in_array($host, ResponseInterface::HOSTS_LOCAL, true);
+        // parse_url keeps the brackets around an IPv6 host (e.g. "[::1]"); strip
+        // them so the loopback address matches HOSTS_LOCAL.
+        return in_array(mb_trim($host, '[]'), ResponseInterface::HOSTS_LOCAL, true);
     }
 }

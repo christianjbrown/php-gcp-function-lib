@@ -6,6 +6,7 @@ namespace ChristianBrown\GcpFunction;
 
 interface FunctionConfigTransformerInterface
 {
+    public const string ENV_ALLOW_LOCAL_ORIGINS = 'ALLOW_LOCAL_ORIGINS';
     public const string ENV_ALLOW_UNAUTHENTICATED = 'ALLOW_UNAUTHENTICATED';
     public const string ENV_DEBUG = 'DEBUG';
     public const string ENV_K_REVISION = 'K_REVISION';

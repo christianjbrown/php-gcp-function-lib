@@ -6,5 +6,5 @@ namespace ChristianBrown\GcpFunction;
 
 interface AllowOriginResolverInterface
 {
-    public function resolve(string $requiredOrigin, ?string $requestOrigin, bool $debug): string;
+    public function resolve(string $requiredOrigin, ?string $requestOrigin, bool $debug, bool $allowLocalOrigins): string;
 }

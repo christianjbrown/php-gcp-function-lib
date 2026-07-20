@@ -31,6 +31,7 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
 
         // Optional values
 
+        self::applyAllowLocalOrigins($config, $env);
         self::applyAllowUnauthenticated($config, $env);
         self::applyDebug($config, $env);
         self::applyRequiredHeaderKey($config, $env);
@@ -41,6 +42,20 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         self::applyUseCacheIfErrorTtl($config, $env);
 
         return $config;
+    }
+
+    /**
+     * @phpstan-param mixed[] $env
+     */
+    private static function applyAllowLocalOrigins(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_ALLOW_LOCAL_ORIGINS])) {
+            return;
+        }
+        if ('true' !== $env[self::ENV_ALLOW_LOCAL_ORIGINS]) {
+            return;
+        }
+        $config->setAllowLocalOrigins(true);
     }
 
     /**

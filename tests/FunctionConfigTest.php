@@ -16,6 +16,7 @@ final class FunctionConfigTest extends TestCase
         $functionConfig = new FunctionConfig('test-krevision');
         self::assertSame('test-krevision', $functionConfig->getKrevision());
 
+        self::assertFalse($functionConfig->getAllowLocalOrigins());
         self::assertFalse($functionConfig->getAllowUnauthenticated());
         self::assertFalse($functionConfig->getDebug());
         self::assertNull($functionConfig->getRequiredHeaderKey());
@@ -25,6 +26,7 @@ final class FunctionConfigTest extends TestCase
         self::assertNull($functionConfig->getUseCacheButRequestTtl());
         self::assertNull($functionConfig->getUseCacheIfErrorTtl());
 
+        $functionConfig->setAllowLocalOrigins(true);
         $functionConfig->setAllowUnauthenticated(true);
         $functionConfig->setDebug(true);
         $functionConfig->setRequiredHeaderKey('test-required-header-key');
@@ -34,6 +36,8 @@ final class FunctionConfigTest extends TestCase
         $functionConfig->setUseCacheButRequestTtl(7200);
         $functionConfig->setUseCacheIfErrorTtl(259200);
 
+        self::assertTrue($functionConfig->getAllowLocalOrigins());
+        self::assertTrue($functionConfig->getAllowUnauthenticated());
         self::assertTrue($functionConfig->getDebug());
         self::assertSame('test-required-header-key', $functionConfig->getRequiredHeaderKey());
         self::assertSame('test-required-header-value', $functionConfig->getRequiredHeaderValue());
