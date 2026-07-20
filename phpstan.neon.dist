@@ -4,11 +4,3 @@ parameters:
     paths:
         - src
         - tests
-    ignoreErrors:
-        # These methods take the raw response/expected payload array as a non-first
-        # parameter. Annotating only that parameter conflicts with the phpcs FunctionComment
-        # positional @param sniff (it maps the lone @param to the first parameter), so the
-        # array value type is intentionally left unspecified on these arbitrary-shape payloads.
-        -
-            identifier: missingType.iterableValue
-            message: '#(__construct|assertResponseSuccess|buildBody|apply\w+)\(\) has parameter \$(data|expectedData|env) with no value type specified in iterable type array#'
