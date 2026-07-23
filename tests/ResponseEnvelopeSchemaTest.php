@@ -126,23 +126,36 @@ final class ResponseEnvelopeSchemaTest extends TestCase
 
         self::assertSame('object', $this->stringProperty($schema, 'type'));
         self::assertFalse($schema->additionalProperties);
+        // `data` is deliberately absent from `required`: a function with an empty payload emits no
+        // `data` key at all (see `ResponseBodyBuilder::appendData`).
         self::assertEqualsCanonicalizing([
             ResponseInterface::RESPONSE_API_KEY_SUCCESS,
             ResponseInterface::RESPONSE_API_KEY_TIMESTAMP_UNIX,
             ResponseInterface::RESPONSE_API_KEY_TIMESTAMP_ISO8601,
             ResponseInterface::RESPONSE_API_KEY_VERSION,
-            ResponseInterface::RESPONSE_API_KEY_DATA,
         ], $this->list($schema->required));
         self::assertSame('boolean', $this->propertyType($schema, ResponseInterface::RESPONSE_API_KEY_SUCCESS));
         self::assertSame('integer', $this->propertyType($schema, ResponseInterface::RESPONSE_API_KEY_TIMESTAMP_UNIX));
         self::assertSame('string', $this->propertyType($schema, ResponseInterface::RESPONSE_API_KEY_TIMESTAMP_ISO8601));
         self::assertSame('string', $this->propertyType($schema, ResponseInterface::RESPONSE_API_KEY_VERSION));
-        // The `data` property is a generic object placeholder each function overrides via `allOf`.
-        self::assertSame('object', $this->propertyType($schema, ResponseInterface::RESPONSE_API_KEY_DATA));
+        // The `data` property is a generic, untyped payload placeholder each function overrides via
+        // `allOf` with its own object *or* array schema, so it carries no `type` of its own.
+        self::assertObjectHasProperty(ResponseInterface::RESPONSE_API_KEY_DATA, $this->object($schema->properties));
+        self::assertObjectNotHasProperty('type', $this->object($this->object($schema->properties)->{ResponseInterface::RESPONSE_API_KEY_DATA}));
 
         $successEnvelope = $this->buildEnvelope([self::KEY_DEVICES => ['a', 'b']], true, null);
 
         $this->assertConforms($successEnvelope, self::SCHEMA_SUCCESS_ENVELOPE);
+
+        // `data` is optional: an empty payload emits no `data` key, which must still conform.
+        $emptyPayload = $this->buildEnvelope([], true, null);
+        self::assertObjectNotHasProperty(ResponseInterface::RESPONSE_API_KEY_DATA, $emptyPayload);
+        $this->assertConforms($emptyPayload, self::SCHEMA_SUCCESS_ENVELOPE);
+
+        // `data` is untyped, so a top-level array payload conforms to the base envelope just as an
+        // object one does — this is what lets a function return `data[]`.
+        $arrayPayload = $this->buildEnvelope(['living-room', 'hallway'], true, null);
+        $this->assertConforms($arrayPayload, self::SCHEMA_SUCCESS_ENVELOPE);
 
         // The pinned `enum: [true]` is what rejects a wrong-flag envelope: an otherwise success-shaped
         // payload (correct required fields, no extra properties) with `success=false` must now fail.
