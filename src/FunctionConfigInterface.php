@@ -20,6 +20,8 @@ interface FunctionConfigInterface
 
     public function getRequiredOrigin(): ?string;
 
+    public function getSurrogateKey(): ?string;
+
     public function getUseCacheButRequestTtl(): ?int;
 
     public function getUseCacheIfErrorTtl(): ?int;
@@ -37,6 +39,8 @@ interface FunctionConfigInterface
     public function setRequiredHeaderValue(?string $value): self;
 
     public function setRequiredOrigin(?string $value): self;
+
+    public function setSurrogateKey(?string $value): self;
 
     public function setUseCacheButRequestTtl(?int $value): self;
 

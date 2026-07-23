@@ -56,6 +56,7 @@ interface ResponseInterface extends PsrResponseInterface
     public const string HEADER_KEY_CONTENT_TYPE = 'Content-Type';
     public const string HEADER_KEY_ORIGIN = 'Origin';
     public const string HEADER_KEY_SURROGATE_CONTROL = 'Surrogate-Control';
+    public const string HEADER_KEY_SURROGATE_KEY = 'Surrogate-Key';
     public const string HEADER_KEY_VARY = 'Vary';
     public const string HEADER_VARY_ACCEPT_ENCODING = 'Accept-Encoding';
     public const string HEADER_VARY_ORIGIN = 'Origin';

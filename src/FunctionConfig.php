@@ -13,6 +13,7 @@ final class FunctionConfig implements FunctionConfigInterface
     private ?string $requiredHeaderKey = null;
     private ?string $requiredHeaderValue = null;
     private ?string $requiredOrigin = null;
+    private ?string $surrogateKey = null;
     private ?int $useCacheButRequestTtl = null;
     private ?int $useCacheIfErrorTtl = null;
     private ?int $useCacheTtl = null;
@@ -55,6 +56,11 @@ final class FunctionConfig implements FunctionConfigInterface
     public function getRequiredOrigin(): ?string
     {
         return $this->requiredOrigin;
+    }
+
+    public function getSurrogateKey(): ?string
+    {
+        return $this->surrogateKey;
     }
 
     public function getUseCacheButRequestTtl(): ?int
@@ -110,6 +116,13 @@ final class FunctionConfig implements FunctionConfigInterface
     public function setRequiredOrigin(?string $value): self
     {
         $this->requiredOrigin = $value;
+
+        return $this;
+    }
+
+    public function setSurrogateKey(?string $value): self
+    {
+        $this->surrogateKey = $value;
 
         return $this;
     }

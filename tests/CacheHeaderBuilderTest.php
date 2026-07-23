@@ -38,6 +38,22 @@ final class CacheHeaderBuilderTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testAddsSurrogateKeyWhenSet(): void
+    {
+        $functionConfig = self::createStub(FunctionConfigInterface::class);
+        $functionConfig->method('getSurrogateKey')
+            ->willReturn('get-historical-climate-data');
+
+        $builder = new CacheHeaderBuilder();
+
+        $headers = $builder->build(ResponseInterface::HEADERS, $functionConfig, true);
+
+        self::assertSame('get-historical-climate-data', $headers[ResponseInterface::HEADER_KEY_SURROGATE_KEY]);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testFailureLeavesHeadersUnchanged(): void
     {
         $functionConfig = self::createStub(FunctionConfigInterface::class);
@@ -73,5 +89,6 @@ final class CacheHeaderBuilderTest extends TestCase
 
         self::assertArrayNotHasKey(ResponseInterface::HEADER_KEY_CACHE_CONTROL, $headers);
         self::assertArrayNotHasKey(ResponseInterface::HEADER_KEY_SURROGATE_CONTROL, $headers);
+        self::assertArrayNotHasKey(ResponseInterface::HEADER_KEY_SURROGATE_KEY, $headers);
     }
 }

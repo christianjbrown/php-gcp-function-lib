@@ -31,6 +31,7 @@ final class CacheHeaderBuilder implements CacheHeaderBuilderInterface
 
         $headers = self::appendCacheControl($headers, $cacheControlParts);
         $headers = self::appendSurrogateControl($headers, $surrogateControlParts);
+        $headers = self::appendSurrogateKey($headers, $functionConfig->getSurrogateKey());
 
         return $headers;
     }
@@ -94,6 +95,20 @@ final class CacheHeaderBuilder implements CacheHeaderBuilderInterface
     {
         if ($surrogateControlParts) {
             $headers[ResponseInterface::HEADER_KEY_SURROGATE_CONTROL] = implode(', ', $surrogateControlParts);
+        }
+
+        return $headers;
+    }
+
+    /**
+     * @param array<string, string> $headers
+     *
+     * @return array<string, string>
+     */
+    private static function appendSurrogateKey(array $headers, ?string $surrogateKey): array
+    {
+        if ($surrogateKey) {
+            $headers[ResponseInterface::HEADER_KEY_SURROGATE_KEY] = $surrogateKey;
         }
 
         return $headers;

@@ -28,6 +28,7 @@ final class FunctionConfigTransformerTest extends TestCase
             FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_KEY => 'test-required-header-key',
             FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_VALUE => 'test-required-header-value',
             FunctionConfigTransformerInterface::ENV_REQUIRED_ORIGIN => 'test-required-origin',
+            FunctionConfigTransformerInterface::ENV_SURROGATE_KEY => 'test-surrogate-key',
             FunctionConfigTransformerInterface::ENV_USE_CACHE_TTL => '3600',
             FunctionConfigTransformerInterface::ENV_USE_CACHE_BUT_REQUEST_TTL => '7200',
             FunctionConfigTransformerInterface::ENV_USE_CACHE_IF_ERROR_TTL => '259200',
@@ -41,6 +42,7 @@ final class FunctionConfigTransformerTest extends TestCase
         self::assertSame('test-required-header-key', $actual->getRequiredHeaderKey());
         self::assertSame('test-required-header-value', $actual->getRequiredHeaderValue());
         self::assertSame('test-required-origin', $actual->getRequiredOrigin());
+        self::assertSame('test-surrogate-key', $actual->getSurrogateKey());
         self::assertSame(3600, $actual->getUseCacheTtl());
         self::assertSame(7200, $actual->getUseCacheButRequestTtl());
         self::assertSame(259200, $actual->getUseCacheIfErrorTtl());
@@ -74,6 +76,7 @@ final class FunctionConfigTransformerTest extends TestCase
         self::assertNull($actual->getRequiredHeaderKey());
         self::assertNull($actual->getRequiredHeaderValue());
         self::assertNull($actual->getRequiredOrigin());
+        self::assertNull($actual->getSurrogateKey());
         self::assertNull($actual->getUseCacheTtl());
         self::assertNull($actual->getUseCacheButRequestTtl());
         self::assertNull($actual->getUseCacheIfErrorTtl());
@@ -89,6 +92,7 @@ final class FunctionConfigTransformerTest extends TestCase
             FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_KEY => 123,
             FunctionConfigTransformerInterface::ENV_REQUIRED_HEADER_VALUE => 456,
             FunctionConfigTransformerInterface::ENV_REQUIRED_ORIGIN => 789,
+            FunctionConfigTransformerInterface::ENV_SURROGATE_KEY => 321,
             FunctionConfigTransformerInterface::ENV_USE_CACHE_TTL => 'not-numeric',
             FunctionConfigTransformerInterface::ENV_USE_CACHE_BUT_REQUEST_TTL => 'not-numeric',
             FunctionConfigTransformerInterface::ENV_USE_CACHE_IF_ERROR_TTL => 'not-numeric',
@@ -102,6 +106,7 @@ final class FunctionConfigTransformerTest extends TestCase
         self::assertNull($actual->getRequiredHeaderKey());
         self::assertNull($actual->getRequiredHeaderValue());
         self::assertNull($actual->getRequiredOrigin());
+        self::assertNull($actual->getSurrogateKey());
         self::assertNull($actual->getUseCacheTtl());
         self::assertNull($actual->getUseCacheButRequestTtl());
         self::assertNull($actual->getUseCacheIfErrorTtl());
