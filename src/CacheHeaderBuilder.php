@@ -25,12 +25,12 @@ final class CacheHeaderBuilder implements CacheHeaderBuilderInterface
 
         $cacheControlParts = [];
         $surrogateControlParts = [];
-        [$cacheControlParts, $surrogateControlParts] = $this->appendUseCacheTtl($cacheControlParts, $surrogateControlParts, $functionConfig->getUseCacheTtl());
-        [$cacheControlParts, $surrogateControlParts] = $this->appendStaleWhileRevalidate($cacheControlParts, $surrogateControlParts, $functionConfig->getUseCacheButRequestTtl());
-        [$cacheControlParts, $surrogateControlParts] = $this->appendStaleIfError($cacheControlParts, $surrogateControlParts, $functionConfig->getUseCacheIfErrorTtl());
+        [$cacheControlParts, $surrogateControlParts] = self::appendUseCacheTtl($cacheControlParts, $surrogateControlParts, $functionConfig->getUseCacheTtl());
+        [$cacheControlParts, $surrogateControlParts] = self::appendStaleWhileRevalidate($cacheControlParts, $surrogateControlParts, $functionConfig->getUseCacheButRequestTtl());
+        [$cacheControlParts, $surrogateControlParts] = self::appendStaleIfError($cacheControlParts, $surrogateControlParts, $functionConfig->getUseCacheIfErrorTtl());
 
-        $headers = $this->appendCacheControl($headers, $cacheControlParts);
-        $headers = $this->appendSurrogateControl($headers, $surrogateControlParts);
+        $headers = self::appendCacheControl($headers, $cacheControlParts);
+        $headers = self::appendSurrogateControl($headers, $surrogateControlParts);
 
         return $headers;
     }
@@ -41,7 +41,7 @@ final class CacheHeaderBuilder implements CacheHeaderBuilderInterface
      *
      * @return array<string, string>
      */
-    private function appendCacheControl(array $headers, array $cacheControlParts): array
+    private static function appendCacheControl(array $headers, array $cacheControlParts): array
     {
         if ($cacheControlParts) {
             $headers[ResponseInterface::HEADER_KEY_CACHE_CONTROL] = implode(', ', $cacheControlParts);
@@ -56,7 +56,7 @@ final class CacheHeaderBuilder implements CacheHeaderBuilderInterface
      *
      * @return array{0: string[], 1: string[]}
      */
-    private function appendStaleIfError(array $cacheControlParts, array $surrogateControlParts, ?int $ttl): array
+    private static function appendStaleIfError(array $cacheControlParts, array $surrogateControlParts, ?int $ttl): array
     {
         if ($ttl) {
             $staleIfError = sprintf(self::DIRECTIVE_STALE_IF_ERROR_SPRINTF, $ttl);
@@ -73,7 +73,7 @@ final class CacheHeaderBuilder implements CacheHeaderBuilderInterface
      *
      * @return array{0: string[], 1: string[]}
      */
-    private function appendStaleWhileRevalidate(array $cacheControlParts, array $surrogateControlParts, ?int $ttl): array
+    private static function appendStaleWhileRevalidate(array $cacheControlParts, array $surrogateControlParts, ?int $ttl): array
     {
         if ($ttl) {
             $staleWhileRevalidate = sprintf(self::DIRECTIVE_STALE_WHILE_REVALIDATE_SPRINTF, $ttl);
@@ -90,7 +90,7 @@ final class CacheHeaderBuilder implements CacheHeaderBuilderInterface
      *
      * @return array<string, string>
      */
-    private function appendSurrogateControl(array $headers, array $surrogateControlParts): array
+    private static function appendSurrogateControl(array $headers, array $surrogateControlParts): array
     {
         if ($surrogateControlParts) {
             $headers[ResponseInterface::HEADER_KEY_SURROGATE_CONTROL] = implode(', ', $surrogateControlParts);
@@ -105,7 +105,7 @@ final class CacheHeaderBuilder implements CacheHeaderBuilderInterface
      *
      * @return array{0: string[], 1: string[]}
      */
-    private function appendUseCacheTtl(array $cacheControlParts, array $surrogateControlParts, ?int $ttl): array
+    private static function appendUseCacheTtl(array $cacheControlParts, array $surrogateControlParts, ?int $ttl): array
     {
         if ($ttl) {
             $maxAge = sprintf(self::DIRECTIVE_MAX_AGE_SPRINTF, $ttl);

@@ -94,6 +94,9 @@ Everything lives directly under `src/` (no sub-layers). PSR-4: `ChristianBrown\G
 - Arrays crossing a public boundary carry a `@param mixed[]` / `@return mixed[]` docblock so PHPStan
   `level: max` is satisfied (the payload can be a list or a map, so `mixed[]`, not
   `array<string, mixed>`).
+- **A method that does not use `$this` must be `static`** (called via `self::`) — a stateless helper
+  is static. Enforced for private methods by the shared `RequireStaticPrivateMethodRule` PHPStan rule
+  (via `php-code-quality-scripts`' `config/phpstan.neon`); interface/override methods stay instance.
 
 ## Testing
 

@@ -28,9 +28,9 @@ final class ResponseBodyBuilder implements ResponseBodyBuilderInterface
             ResponseInterface::RESPONSE_API_KEY_TIMESTAMP_ISO8601 => gmdate('c', $time),
         ];
 
-        $bodyJson = $this->appendData($bodyJson, $data);
-        $bodyJson = $this->appendVersion($bodyJson, $functionConfig);
-        $bodyJson = $this->appendError($bodyJson, $error);
+        $bodyJson = self::appendData($bodyJson, $data);
+        $bodyJson = self::appendVersion($bodyJson, $functionConfig);
+        $bodyJson = self::appendError($bodyJson, $error);
 
         ksort($bodyJson);
 
@@ -67,7 +67,7 @@ final class ResponseBodyBuilder implements ResponseBodyBuilderInterface
      *
      * @return mixed[]
      */
-    private function appendData(array $bodyJson, array $data): array
+    private static function appendData(array $bodyJson, array $data): array
     {
         if ($data) {
             $bodyJson[ResponseInterface::RESPONSE_API_KEY_DATA] = $data;
@@ -81,7 +81,7 @@ final class ResponseBodyBuilder implements ResponseBodyBuilderInterface
      *
      * @return mixed[]
      */
-    private function appendError(array $bodyJson, ?string $error): array
+    private static function appendError(array $bodyJson, ?string $error): array
     {
         if (null !== $error) {
             $bodyJson[ResponseInterface::RESPONSE_API_KEY_ERROR] = $error;
@@ -95,7 +95,7 @@ final class ResponseBodyBuilder implements ResponseBodyBuilderInterface
      *
      * @return mixed[]
      */
-    private function appendVersion(array $bodyJson, ?FunctionConfigInterface $functionConfig): array
+    private static function appendVersion(array $bodyJson, ?FunctionConfigInterface $functionConfig): array
     {
         if ($functionConfig instanceof FunctionConfigInterface) {
             $bodyJson[ResponseInterface::RESPONSE_API_KEY_VERSION] = $functionConfig->getKrevision();
