@@ -37,6 +37,7 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
         self::applyRequiredHeaderKey($config, $env);
         self::applyRequiredHeaderValue($config, $env);
         self::applyRequiredOrigin($config, $env);
+        self::applySurrogateKey($config, $env);
         self::applyUseCacheTtl($config, $env);
         self::applyUseCacheButRequestTtl($config, $env);
         self::applyUseCacheIfErrorTtl($config, $env);
@@ -126,6 +127,20 @@ final class FunctionConfigTransformer implements FunctionConfigTransformerInterf
             return;
         }
         $config->setRequiredOrigin($env[self::ENV_REQUIRED_ORIGIN]);
+    }
+
+    /**
+     * @phpstan-param mixed[] $env
+     */
+    private static function applySurrogateKey(FunctionConfigInterface $config, array $env): void
+    {
+        if (empty($env[self::ENV_SURROGATE_KEY])) {
+            return;
+        }
+        if (!is_string($env[self::ENV_SURROGATE_KEY])) {
+            return;
+        }
+        $config->setSurrogateKey($env[self::ENV_SURROGATE_KEY]);
     }
 
     /**
