@@ -26,14 +26,14 @@ final class AllowOriginResolver implements AllowOriginResolverInterface
                 return $requiredOrigin;
             }
         }
-        if (!$this->isLocalOrigin($requestOrigin)) {
+        if (!self::isLocalOrigin($requestOrigin)) {
             return $requiredOrigin;
         }
 
         return $requestOrigin;
     }
 
-    private function isLocalOrigin(string $origin): bool
+    private static function isLocalOrigin(string $origin): bool
     {
         if (empty($origin)) {
             return false;
