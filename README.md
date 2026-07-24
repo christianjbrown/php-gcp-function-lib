@@ -1,6 +1,6 @@
 # Google Cloud Run Function framework
 
-[![CI](https://github.com/christianjbrown/php-gcp-function-lib/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/php-gcp-function-lib/actions/workflows/ci.yml)
+[![CI](https://github.com/christianjbrown/cloud-run-function-lib-php/actions/workflows/ci.yml/badge.svg)](https://github.com/christianjbrown/cloud-run-function-lib-php/actions/workflows/ci.yml)
 
 A strongly-typed PHP framework for building [Google Cloud Run function](https://cloud.google.com/run) HTTP endpoints that return a **consistent JSON envelope**. You write the business logic; the library handles header-based authorization, CORS, CDN cache-control headers, and uniform success/error responses.
 
@@ -28,7 +28,7 @@ It is built around [PSR-7](https://www.php-fig.org/psr/psr-7/): you hand it a `S
 For your composer-enabled project:
 
 ```bash
-composer require christianjbrown/php-gcp-function-lib
+composer require christianjbrown/cloud-run-function-lib
 ```
 
 
@@ -112,7 +112,7 @@ An error response omits `data` and adds `error`:
 
 ## :rotating_light: Error handling
 
-Inside your `DataProviderInterface::getData()`, throwing an exception that implements [`christianjbrown/php-user-friendly-exception-lib`](https://github.com/christianjbrown/php-user-friendly-exception-lib)'s `UserFriendlyExceptionInterface` returns its message to the client (HTTP 500). Any other `Throwable` returns a generic `"An unhandled error occurred"` message — unless `DEBUG` is enabled, in which case the raw message is returned to aid debugging. A failed authorization check short-circuits with `"Not authorized"` (HTTP 401) before your handler runs.
+Inside your `DataProviderInterface::getData()`, throwing an exception that implements [`christianjbrown/user-friendly-exception`](https://github.com/christianjbrown/user-friendly-exception-php)'s `UserFriendlyExceptionInterface` returns its message to the client (HTTP 500). Any other `Throwable` returns a generic `"An unhandled error occurred"` message — unless `DEBUG` is enabled, in which case the raw message is returned to aid debugging. A failed authorization check short-circuits with `"Not authorized"` (HTTP 401) before your handler runs.
 
 ## :page_facing_up: License
 

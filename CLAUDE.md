@@ -27,7 +27,7 @@ gitignored and Composer-installed, so run `composer install` first.
 | Check / fix style on git diff only | `composer check-style-diff` / `composer fix-style-diff` |
 | Static analysis | `composer stan` |
 
-Style tooling comes from the `christianjbrown/php-code-quality-scripts` dev dependency: linting via
+Style tooling comes from the `christianjbrown/code-quality-scripts` dev dependency: linting via
 **PHP_CodeSniffer 4** with the **`ChristianBrown` standard** (slevomat sniffs plus PSR/PEAR/Squiz/Generic),
 and formatting via **php-cs-fixer** (`@PhpCsFixer`/`@Symfony` rule sets); the `bin/php-cs*` scripts are thin wrappers over it.
 Static analysis is **PHPStan at `level: max`** (`phpstan.neon.dist`, run with `composer stan` /
@@ -96,7 +96,7 @@ Everything lives directly under `src/` (no sub-layers). PSR-4: `ChristianBrown\G
   `array<string, mixed>`).
 - **A method that does not use `$this` must be `static`** (called via `self::`) — a stateless helper
   is static. Enforced for private methods by the shared `RequireStaticPrivateMethodRule` PHPStan rule
-  (via `php-code-quality-scripts`' `config/phpstan.neon`); interface/override methods stay instance.
+  (via `code-quality-scripts`' `config/phpstan.neon`); interface/override methods stay instance.
 
 ## Testing
 

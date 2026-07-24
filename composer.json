@@ -1,6 +1,6 @@
 {
-    "name": "christianjbrown/php-gcp-function-lib",
-    "description": "A strongly-typed PHP 8.5+ framework for building Google Cloud Run / Cloud Functions HTTP endpoints that return a consistent JSON envelope with built-in header auth, CORS, and CDN cache-control headers.",
+    "name": "christianjbrown/cloud-run-function-lib",
+    "description": "A strongly-typed PHP 8.5+ framework for building Google Cloud Run functions HTTP endpoints that return a consistent JSON envelope with built-in header auth, CORS, and CDN cache-control headers.",
     "type": "library",
     "license": "MIT",
     "keywords": ["google-cloud", "cloud-run", "cloud-functions", "serverless", "psr-7", "json-api"],
@@ -11,11 +11,11 @@
     ],
     "require": {
         "php": "^8.5",
-        "christianjbrown/php-user-friendly-exception-lib": "dev-main",
+        "christianjbrown/user-friendly-exception": "dev-main",
         "guzzlehttp/guzzle": "^7.15"
     },
     "require-dev": {
-        "christianjbrown/php-code-quality-scripts": "dev-main",
+        "christianjbrown/code-quality-scripts": "dev-main",
         "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^13.0",
         "zircote/swagger-php": "^6.4",
@@ -60,11 +60,11 @@
     "repositories": [
         {
             "type": "github",
-            "url": "git@github.com:christianjbrown/php-code-quality-scripts.git"
+            "url": "git@github.com:christianjbrown/code-quality-scripts-php.git"
         },
         {
             "type": "github",
-            "url": "git@github.com:christianjbrown/php-user-friendly-exception-lib.git"
+            "url": "git@github.com:christianjbrown/user-friendly-exception-php.git"
         }
     ]
 }
