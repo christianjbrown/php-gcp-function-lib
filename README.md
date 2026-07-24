@@ -38,7 +38,7 @@ composer require christianjbrown/cloud-run-function-lib
 Implement `DataProviderInterface` with your endpoint's logic — it receives the PSR-7 request and returns an array that becomes the response `data`:
 
 ```php
-use ChristianBrown\GcpFunction\DataProviderInterface;
+use ChristianBrown\CloudRunFunction\DataProviderInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class MyDataProvider implements DataProviderInterface
@@ -55,15 +55,15 @@ final class MyDataProvider implements DataProviderInterface
 }
 ```
 
-Build a `FunctionConfig` from your Cloud Run environment variables with `FunctionConfigTransformer`, wire it into a `CloudFunction`, and run the request:
+Build a `FunctionConfig` from your Cloud Run environment variables with `FunctionConfigTransformer`, wire it into a `CloudRunFunction`, and run the request:
 
 ```php
-use ChristianBrown\GcpFunction\CloudFunction;
-use ChristianBrown\GcpFunction\FunctionConfigTransformer;
+use ChristianBrown\CloudRunFunction\CloudRunFunction;
+use ChristianBrown\CloudRunFunction\FunctionConfigTransformer;
 
 $config = (new FunctionConfigTransformer())->transform($_ENV);
 
-$cloudFunction = new CloudFunction(new MyDataProvider(), $config);
+$cloudFunction = new CloudRunFunction(new MyDataProvider(), $config);
 
 $response = $cloudFunction->run($request); // Psr\Http\Message\ResponseInterface
 ```

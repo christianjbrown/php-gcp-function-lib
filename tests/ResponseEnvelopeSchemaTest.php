@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\GcpFunction\Tests;
+namespace ChristianBrown\CloudRunFunction\Tests;
 
-use ChristianBrown\GcpFunction\FunctionConfigInterface;
-use ChristianBrown\GcpFunction\ResponseBodyBuilder;
-use ChristianBrown\GcpFunction\ResponseInterface;
+use ChristianBrown\CloudRunFunction\FunctionConfigInterface;
+use ChristianBrown\CloudRunFunction\ResponseBodyBuilder;
+use ChristianBrown\CloudRunFunction\ResponseInterface;
 use OpenApi\Generator;
 use Opis\JsonSchema\Validator;
 use PHPUnit\Framework\Attributes\CoversClass;

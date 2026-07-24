@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ChristianBrown\\GcpFunction\\": "src/"
+            "ChristianBrown\\CloudRunFunction\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ChristianBrown\\GcpFunction\\Tests\\": "tests/"
+            "ChristianBrown\\CloudRunFunction\\Tests\\": "tests/"
         }
     },
     "scripts": {

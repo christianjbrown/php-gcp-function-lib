@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\GcpFunction\Tests;
+namespace ChristianBrown\CloudRunFunction\Tests;
 
-use ChristianBrown\GcpFunction\AllowOriginResolverInterface;
-use ChristianBrown\GcpFunction\CorsHeaderBuilder;
-use ChristianBrown\GcpFunction\FunctionConfigInterface;
-use ChristianBrown\GcpFunction\ResponseInterface;
+use ChristianBrown\CloudRunFunction\AllowOriginResolverInterface;
+use ChristianBrown\CloudRunFunction\CorsHeaderBuilder;
+use ChristianBrown\CloudRunFunction\FunctionConfigInterface;
+use ChristianBrown\CloudRunFunction\ResponseInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;

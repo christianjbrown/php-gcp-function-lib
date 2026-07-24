@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\GcpFunction;
+namespace ChristianBrown\CloudRunFunction;
 
 use RuntimeException;
 

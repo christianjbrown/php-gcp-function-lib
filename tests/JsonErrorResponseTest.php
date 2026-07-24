@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\GcpFunction\Tests;
+namespace ChristianBrown\CloudRunFunction\Tests;
 
-use ChristianBrown\GcpFunction\AbstractJsonResponse;
-use ChristianBrown\GcpFunction\AllowOriginResolver;
-use ChristianBrown\GcpFunction\CacheHeaderBuilder;
-use ChristianBrown\GcpFunction\CorsHeaderBuilder;
-use ChristianBrown\GcpFunction\FunctionConfigInterface;
-use ChristianBrown\GcpFunction\JsonErrorResponse;
-use ChristianBrown\GcpFunction\ResponseBodyBuilder;
-use ChristianBrown\GcpFunction\ResponseInterface;
+use ChristianBrown\CloudRunFunction\AbstractJsonResponse;
+use ChristianBrown\CloudRunFunction\AllowOriginResolver;
+use ChristianBrown\CloudRunFunction\CacheHeaderBuilder;
+use ChristianBrown\CloudRunFunction\CorsHeaderBuilder;
+use ChristianBrown\CloudRunFunction\FunctionConfigInterface;
+use ChristianBrown\CloudRunFunction\JsonErrorResponse;
+use ChristianBrown\CloudRunFunction\ResponseBodyBuilder;
+use ChristianBrown\CloudRunFunction\ResponseInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 

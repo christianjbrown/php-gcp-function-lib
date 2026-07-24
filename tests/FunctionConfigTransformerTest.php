@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\GcpFunction\Tests;
+namespace ChristianBrown\CloudRunFunction\Tests;
 
-use ChristianBrown\GcpFunction\FunctionConfig;
-use ChristianBrown\GcpFunction\FunctionConfigTransformer;
-use ChristianBrown\GcpFunction\FunctionConfigTransformerInterface;
+use ChristianBrown\CloudRunFunction\FunctionConfig;
+use ChristianBrown\CloudRunFunction\FunctionConfigTransformer;
+use ChristianBrown\CloudRunFunction\FunctionConfigTransformerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
