@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\GcpFunction\Tests;
+namespace ChristianBrown\CloudRunFunction\Tests;
 
-use ChristianBrown\GcpFunction\AllowOriginResolver;
+use ChristianBrown\CloudRunFunction\AllowOriginResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;

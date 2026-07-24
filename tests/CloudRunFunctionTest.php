@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\GcpFunction\Tests;
+namespace ChristianBrown\CloudRunFunction\Tests;
 
-use ChristianBrown\GcpFunction\AbstractJsonResponse;
-use ChristianBrown\GcpFunction\AllowOriginResolver;
-use ChristianBrown\GcpFunction\CacheHeaderBuilder;
-use ChristianBrown\GcpFunction\CloudFunction;
-use ChristianBrown\GcpFunction\CloudFunctionInterface;
-use ChristianBrown\GcpFunction\CorsHeaderBuilder;
-use ChristianBrown\GcpFunction\DataProviderInterface;
-use ChristianBrown\GcpFunction\FunctionConfigInterface;
-use ChristianBrown\GcpFunction\JsonErrorResponse;
-use ChristianBrown\GcpFunction\JsonErrorResponseInterface;
-use ChristianBrown\GcpFunction\JsonSuccessResponse;
-use ChristianBrown\GcpFunction\JsonSuccessResponseInterface;
-use ChristianBrown\GcpFunction\ResponseBodyBuilder;
-use ChristianBrown\GcpFunction\ResponseInterface;
+use ChristianBrown\CloudRunFunction\AbstractJsonResponse;
+use ChristianBrown\CloudRunFunction\AllowOriginResolver;
+use ChristianBrown\CloudRunFunction\CacheHeaderBuilder;
+use ChristianBrown\CloudRunFunction\CloudRunFunction;
+use ChristianBrown\CloudRunFunction\CloudRunFunctionInterface;
+use ChristianBrown\CloudRunFunction\CorsHeaderBuilder;
+use ChristianBrown\CloudRunFunction\DataProviderInterface;
+use ChristianBrown\CloudRunFunction\FunctionConfigInterface;
+use ChristianBrown\CloudRunFunction\JsonErrorResponse;
+use ChristianBrown\CloudRunFunction\JsonErrorResponseInterface;
+use ChristianBrown\CloudRunFunction\JsonSuccessResponse;
+use ChristianBrown\CloudRunFunction\JsonSuccessResponseInterface;
+use ChristianBrown\CloudRunFunction\ResponseBodyBuilder;
+use ChristianBrown\CloudRunFunction\ResponseInterface;
 use ChristianBrown\UserFriendlyException\UserFriendlyException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -33,8 +33,8 @@ use RuntimeException;
 #[CoversClass(CacheHeaderBuilder::class)]
 #[CoversClass(CorsHeaderBuilder::class)]
 #[CoversClass(ResponseBodyBuilder::class)]
-#[CoversClass(CloudFunction::class)]
-final class CloudFunctionTest extends TestCase
+#[CoversClass(CloudRunFunction::class)]
+final class CloudRunFunctionTest extends TestCase
 {
     /**
      * @throws Exception
@@ -66,11 +66,11 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getUseCacheIfErrorTtl')
             ->willReturn(259200);
 
-        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+        $cloudFunction = new CloudRunFunction($dataProvider, $functionConfig);
 
         $actual = $cloudFunction->run($request);
 
-        self::assertResponseError($actual, CloudFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
+        self::assertResponseError($actual, CloudRunFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
     }
 
     /**
@@ -96,11 +96,11 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getKrevision')
             ->willReturn('test-krevision');
 
-        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+        $cloudFunction = new CloudRunFunction($dataProvider, $functionConfig);
 
         $actual = $cloudFunction->run($request);
 
-        self::assertResponseError($actual, CloudFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', null);
+        self::assertResponseError($actual, CloudRunFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', null);
     }
 
     /**
@@ -122,11 +122,11 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getKrevision')
             ->willReturn('test-krevision');
 
-        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+        $cloudFunction = new CloudRunFunction($dataProvider, $functionConfig);
 
         $actual = $cloudFunction->run($request);
 
-        self::assertResponseError($actual, CloudFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', 'Accept-Encoding,Origin');
+        self::assertResponseError($actual, CloudRunFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', 'Accept-Encoding,Origin');
     }
 
     /**
@@ -163,11 +163,11 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getUseCacheIfErrorTtl')
             ->willReturn(259200);
 
-        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+        $cloudFunction = new CloudRunFunction($dataProvider, $functionConfig);
 
         $actual = $cloudFunction->run($request);
 
-        self::assertResponseError($actual, CloudFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
+        self::assertResponseError($actual, CloudRunFunctionInterface::ERROR_NOT_AUTHORIZED, 401, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
     }
 
     /**
@@ -207,7 +207,7 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getUseCacheIfErrorTtl')
             ->willReturn(259200);
 
-        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+        $cloudFunction = new CloudRunFunction($dataProvider, $functionConfig);
 
         $actual = $cloudFunction->run($request);
 
@@ -255,14 +255,14 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getUseCacheIfErrorTtl')
             ->willReturn(259200);
 
-        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+        $cloudFunction = new CloudRunFunction($dataProvider, $functionConfig);
 
         $actual = $cloudFunction->run($request);
 
         if ($debug) {
             self::assertResponseError($actual, 'test-exception-message', 500, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
         } else {
-            self::assertResponseError($actual, CloudFunctionInterface::ERROR_UNHANDLED, 500, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
+            self::assertResponseError($actual, CloudRunFunctionInterface::ERROR_UNHANDLED, 500, 'test-origin', 'Accept-Encoding,Origin,test-header-key');
         }
     }
 
@@ -300,7 +300,7 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getUseCacheIfErrorTtl')
             ->willReturn(259200);
 
-        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+        $cloudFunction = new CloudRunFunction($dataProvider, $functionConfig);
 
         $actual = $cloudFunction->run($request);
 
@@ -343,7 +343,7 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getUseCacheIfErrorTtl')
             ->willReturn(259200);
 
-        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+        $cloudFunction = new CloudRunFunction($dataProvider, $functionConfig);
 
         $actual = $cloudFunction->run($request);
 
@@ -375,7 +375,7 @@ final class CloudFunctionTest extends TestCase
         $functionConfig->method('getUseCacheIfErrorTtl')
             ->willReturn(259200);
 
-        $cloudFunction = new CloudFunction($dataProvider, $functionConfig);
+        $cloudFunction = new CloudRunFunction($dataProvider, $functionConfig);
 
         $actual = $cloudFunction->run($request);
 

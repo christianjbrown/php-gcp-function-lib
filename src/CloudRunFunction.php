@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChristianBrown\GcpFunction;
+namespace ChristianBrown\CloudRunFunction;
 
 use ChristianBrown\UserFriendlyException\UserFriendlyExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,7 +10,7 @@ use Throwable;
 
 use function hash_equals;
 
-final class CloudFunction implements CloudFunctionInterface
+final class CloudRunFunction implements CloudRunFunctionInterface
 {
     private DataProviderInterface $dataProvider;
     private FunctionConfigInterface $functionConfig;

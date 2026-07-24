@@ -9,7 +9,7 @@ A strongly-typed PHP 8.5+ framework for building **Google Cloud Run function** H
 endpoints that return a consistent JSON envelope, with built-in header authorization, CORS, and CDN
 cache-control headers. It is built around [PSR-7](https://www.php-fig.org/psr/psr-7/): a consumer
 implements `DataProviderInterface` (their business logic), builds a `FunctionConfig` from Cloud Run
-environment variables via `FunctionConfigTransformer`, wires both into a `CloudFunction`, and calls
+environment variables via `FunctionConfigTransformer`, wires both into a `CloudRunFunction`, and calls
 `run(ServerRequestInterface): ResponseInterface`.
 
 ## Commands
@@ -21,7 +21,7 @@ gitignored and Composer-installed, so run `composer install` first.
 | --- | --- |
 | Run tests + coverage (opens HTML report) | `composer test` |
 | Run tests, no coverage | `php -d memory_limit=-1 ./bin/phpunit --no-coverage` |
-| Run one test | `php -d memory_limit=-1 ./bin/phpunit --filter CloudFunctionTest` |
+| Run one test | `php -d memory_limit=-1 ./bin/phpunit --filter CloudRunFunctionTest` |
 | Check code style | `composer check-style` |
 | Auto-fix code style | `composer fix-style` |
 | Check / fix style on git diff only | `composer check-style-diff` / `composer fix-style-diff` |
@@ -40,10 +40,10 @@ secret. Always run `composer fix-style` first (php-cs-fixer auto-fixes what it c
 
 ## Architecture
 
-Everything lives directly under `src/` (no sub-layers). PSR-4: `ChristianBrown\GcpFunction\` →
-`src/`, `ChristianBrown\GcpFunction\Tests\` → `tests/`.
+Everything lives directly under `src/` (no sub-layers). PSR-4: `ChristianBrown\CloudRunFunction\` →
+`src/`, `ChristianBrown\CloudRunFunction\Tests\` → `tests/`.
 
-- **`CloudFunction`** (`src/CloudFunction.php`) — the entry point. Constructed with a
+- **`CloudRunFunction`** (`src/CloudRunFunction.php`) — the entry point. Constructed with a
   `DataProviderInterface` + `FunctionConfigInterface`. Its `run()` checks header authorization
   (returns a `JsonErrorResponse` 401 if it fails), calls `getData()`, and wraps the result in a
   `JsonSuccessResponse`. It catches `UserFriendlyExceptionInterface` (returns the message) and any
@@ -79,7 +79,7 @@ Everything lives directly under `src/` (no sub-layers). PSR-4: `ChristianBrown\G
 
 - `declare(strict_types=1);` on every file, immediately after `<?php`.
 - **Every concrete class is `final` and implements a matching `...Interface`** in the same namespace
-  (`CloudFunction`/`CloudFunctionInterface`, `FunctionConfig`/`FunctionConfigInterface`). The only
+  (`CloudRunFunction`/`CloudRunFunctionInterface`, `FunctionConfig`/`FunctionConfigInterface`). The only
   abstract class is `AbstractJsonResponse` (see the note above); otherwise prefer composition.
 - **Constants live on the interface, not the class**: env-var keys (`ENV_*`), header names/values,
   response body keys (`RESPONSE_API_KEY_*`), and error messages (`ERROR_*`) — all typed constants
